@@ -4,36 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
   <title>MCEN3001 Machine Design — Exam Theory Flashcards</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter & JetBrains Mono for crisp technical legibility -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-          },
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              400: '#60a5fa',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <meta name="theme-color" content="#020617" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MCEN3001" />
+  <meta name="description" content="MCEN3001 Machine Design exam theory flashcards" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <!-- Pre-built Tailwind CSS (no CDN: loads fast and works offline) -->
+  <link rel="stylesheet" href="tailwind.css" />
 
   <style>
     /* Custom High-Visibility & 3D Flip Styling */
@@ -41,7 +22,10 @@
       --card-scale: 1;
     }
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      touch-action: manipulation;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
       -webkit-tap-highlight-color: transparent;
       overflow-x: hidden;
     }
@@ -134,13 +118,27 @@
 
     /* Keycap styling */
     .kbd-key {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+    }
+
+    /* Safe areas (notch / home bar) for full-screen use */
+    header { padding-top: env(safe-area-inset-top); }
+    @media (prefers-reduced-motion: reduce) {
+      .flip-card-inner { transition: none; }
+    }
+    .verify-box code, .dynamic-a-text code { overflow-wrap: anywhere; }
+    .dynamic-a-text { overflow-wrap: anywhere; }
+    @media (max-width: 639px) {
+      html { scroll-padding-top: 0; }
+      body.text-size-normal { --q-size: 1.35rem; --a-size: 1.02rem; --list-q-size: 1.15rem; --list-a-size: 1rem; }
+      body.text-size-large  { --q-size: 1.55rem; --a-size: 1.14rem; --list-q-size: 1.28rem; --list-a-size: 1.1rem; }
+      body.text-size-xl     { --q-size: 1.8rem;  --a-size: 1.3rem;  --list-q-size: 1.45rem; --list-a-size: 1.25rem; }
     }
   </style>
 </head>
 
-<body class="text-size-large bg-slate-950 text-slate-50 dark:bg-slate-950 dark:text-slate-50 min-h-screen flex flex-col selection:bg-amber-400 selection:text-slate-950 transition-colors duration-200">
+<body class="text-size-large bg-slate-950 text-slate-50 dark:bg-slate-950 dark:text-slate-50 min-h-screen min-h-[100dvh] flex flex-col selection:bg-amber-400 selection:text-slate-950 transition-colors duration-200">
 
   <!-- TOP STICKY NAVIGATION & CONTROLS HEADER -->
   <header class="sm:sticky sm:top-0 z-40 bg-slate-900/95 dark:bg-slate-900/95 border-b border-slate-800 backdrop-blur-md shadow-lg">
@@ -171,11 +169,11 @@
         <div class="flex items-center gap-2 w-full sm:w-auto">
           <!-- Mode Switcher: Flip Mode vs All Cards List -->
           <div class="inline-flex rounded-xl bg-slate-950 p-1 border border-slate-800" role="group" aria-label="View Mode">
-            <button id="btnModeFlip" onclick="setViewMode('flip')" class="px-3.5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all bg-amber-400 text-slate-950 shadow">
+            <button id="btnModeFlip" onclick="setViewMode('flip')" class="px-3.5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all bg-amber-400 text-slate-950 shadow">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
               <span>Card Flip</span>
             </button>
-            <button id="btnModeList" onclick="setViewMode('list')" class="px-3.5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all text-slate-300 hover:text-white">
+            <button id="btnModeList" onclick="setViewMode('list')" class="px-3.5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 transition-all text-slate-300 hover:text-white">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
               <span class="sm:hidden">List</span><span class="hidden sm:inline">All Cards List</span>
             </button>
@@ -183,13 +181,13 @@
 
           <!-- Font Size Scaler (A- / A / A+) -->
           <div class="inline-flex ml-auto rounded-xl bg-slate-950 p-1 border border-slate-800" title="Adjust Text Size for Mobile/PC Visibility">
-            <button onclick="setTextSize('normal')" id="sizeBtn-normal" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition">A</button>
-            <button onclick="setTextSize('large')" id="sizeBtn-large" class="px-2.5 py-1.5 rounded-lg text-sm font-extrabold bg-slate-800 text-amber-300 transition">A+</button>
-            <button onclick="setTextSize('xl')" id="sizeBtn-xl" class="px-2.5 py-1.5 rounded-lg text-base font-black text-slate-400 hover:text-white transition">A++</button>
+            <button onclick="setTextSize('normal')" id="sizeBtn-normal" class="px-3 py-2 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition">A</button>
+            <button onclick="setTextSize('large')" id="sizeBtn-large" class="px-3 py-2 rounded-lg text-sm font-extrabold bg-slate-800 text-amber-300 transition">A+</button>
+            <button onclick="setTextSize('xl')" id="sizeBtn-xl" class="px-3 py-2 rounded-lg text-base font-black text-slate-400 hover:text-white transition">A++</button>
           </div>
 
           <!-- High-Contrast Theme Toggle -->
-          <button onclick="toggleContrastTheme()" id="btnTheme" class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 hover:border-amber-400/50 hover:text-amber-300 transition" title="Switch Dark / Light High-Contrast Theme">
+          <button onclick="toggleContrastTheme()" id="btnTheme" class="p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 hover:border-amber-400/50 hover:text-amber-300 transition" title="Switch Dark / Light High-Contrast Theme">
             <svg id="iconSun" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
           </button>
         </div>
@@ -206,11 +204,11 @@
   <main class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 pt-4 pb-28 sm:py-8 flex flex-col">
 
     <!-- PROGRESS & STATS BAR -->
-    <div class="mb-5 bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-md">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-2.5">
+    <div class="mb-3 sm:mb-5 bg-slate-900/90 border border-slate-800 rounded-2xl p-3 sm:p-4 shadow-md">
+      <div class="flex flex-wrap items-center justify-between gap-2 sm:gap-3 mb-2">
         <div class="flex items-center gap-3">
           <span id="progressCounterText" class="text-base sm:text-lg font-extrabold text-white font-mono">
-            Card 1 of 28
+            Card 1 of 36
           </span>
           <span id="activeCategoryBadge" class="text-xs sm:text-sm font-bold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
             All Topics
@@ -218,25 +216,25 @@
         </div>
 
         <!-- Mastery & Shuffle Action Controls -->
-        <div class="flex flex-wrap items-center gap-2">
-          <button onclick="toggleFilterUnmastered()" id="btnFilterReview" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold border border-slate-700 bg-slate-800/80 text-slate-200 hover:border-amber-400 transition flex items-center gap-1.5">
+        <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto no-scrollbar">
+          <button onclick="toggleFilterUnmastered()" id="btnFilterReview" class="shrink-0 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold border border-slate-700 bg-slate-800/80 text-slate-200 hover:border-amber-400 transition flex items-center gap-1.5">
             <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
             <span id="reviewFilterLabel">To Review Only: OFF</span>
           </button>
 
-          <button onclick="shuffleDeck()" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold border border-slate-700 bg-slate-800/80 text-slate-200 hover:bg-slate-700 hover:text-amber-300 transition flex items-center gap-1.5" title="Shuffle current cards">
+          <button onclick="shuffleDeck()" class="shrink-0 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold border border-slate-700 bg-slate-800/80 text-slate-200 hover:bg-slate-700 hover:text-amber-300 transition flex items-center gap-1.5" title="Shuffle current cards">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             <span>Shuffle</span>
           </button>
 
-          <button onclick="resetMastery()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-rose-400 transition" title="Reset mastered checkmarks">
-            Reset (<span id="masteredCountBadge">0/28</span>)
+          <button onclick="resetMastery()" class="shrink-0 ml-auto px-2.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-rose-400 transition" title="Reset mastered checkmarks">
+            Reset (<span id="masteredCountBadge">0/36</span>)
           </button>
         </div>
       </div>
 
       <!-- Dual Progress Bar: Deck Position & Mastery -->
-      <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
+      <div class="w-full h-2 sm:h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5 mt-2">
         <div id="deckProgressBar" class="h-full bg-gradient-to-r from-amber-400 via-orange-400 to-emerald-400 rounded-full transition-all duration-300" style="width: 4%"></div>
       </div>
     </div>
@@ -251,7 +249,7 @@
         <div id="flipCardInner" class="flip-card-inner">
 
           <!-- ==================== FRONT FACE (QUESTION) ==================== -->
-          <div id="cardFrontFace" onclick="handleCardBodyClick(event)" class="flip-card-face flip-card-front cursor-pointer rounded-3xl bg-gradient-to-b from-slate-900 to-slate-900/95 border-2 border-slate-700/90 hover:border-amber-400/70 shadow-2xl p-5 sm:p-9 md:p-12 flex flex-col justify-between min-h-[300px] sm:min-h-[450px] transition-colors">
+          <div id="cardFrontFace" onclick="handleCardBodyClick(event)" class="flip-card-face flip-card-front cursor-pointer rounded-3xl bg-gradient-to-b from-slate-900 to-slate-900/95 border-2 border-slate-700/90 hover:border-amber-400/70 shadow-2xl p-4 sm:p-9 md:p-12 flex flex-col justify-between min-h-[max(21rem,calc(100dvh-19rem))] sm:min-h-[450px] transition-colors">
             
             <!-- Card Header Metadata -->
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-4">
@@ -262,13 +260,14 @@
                 <span id="frontSourceTag" class="px-3 py-1 rounded-lg bg-slate-800 text-amber-300 font-mono font-bold text-xs sm:text-sm border border-slate-700">
                   Sample Exam Q1.1 / L1 Q4
                 </span>
+                <span id="frontVerifyBadge" class="hidden px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-200 border border-rose-400/50 font-extrabold text-xs uppercase tracking-wider">⚠ Check answer</span>
                 <span id="frontExamBadge" class="hidden px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 font-extrabold text-xs uppercase tracking-wider">
                   ★ Sample Exam Question
                 </span>
               </div>
 
               <!-- Mastered Status Button -->
-              <button onclick="toggleCurrentCardMastered(event)" id="btnMasteredFront" class="px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border border-slate-700 bg-slate-800/90 text-slate-300 hover:border-emerald-400 transition flex items-center gap-1.5">
+              <button onclick="toggleCurrentCardMastered(event)" id="btnMasteredFront" class="px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm border border-slate-700 bg-slate-800/90 text-slate-300 hover:border-emerald-400 transition flex items-center gap-1.5">
                 <span id="masteredIconFront">○</span>
                 <span id="masteredTextFront">Mark Mastered</span>
               </button>
@@ -306,7 +305,7 @@
           </div>
 
           <!-- ==================== BACK FACE (MODEL ANSWER + SKETCH) ==================== -->
-          <div id="cardBackFace" onclick="handleCardBodyClick(event)" class="flip-card-face flip-card-back cursor-pointer rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-2 border-emerald-500/80 shadow-2xl p-5 sm:p-9 md:p-11 flex flex-col justify-between min-h-[300px] sm:min-h-[450px]">
+          <div id="cardBackFace" onclick="handleCardBodyClick(event)" class="flip-card-face flip-card-back cursor-pointer rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-2 border-emerald-500/80 shadow-2xl p-4 sm:p-9 md:p-11 flex flex-col justify-between min-h-[max(21rem,calc(100dvh-19rem))] sm:min-h-[450px]">
             
             <!-- Back Header -->
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3.5">
@@ -319,7 +318,7 @@
                 </span>
               </div>
 
-              <button onclick="toggleCurrentCardMastered(event)" id="btnMasteredBack" class="px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border border-slate-700 bg-slate-800 text-slate-200 hover:border-emerald-400 transition flex items-center gap-1.5">
+              <button onclick="toggleCurrentCardMastered(event)" id="btnMasteredBack" class="px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm border border-slate-700 bg-slate-800 text-slate-200 hover:border-emerald-400 transition flex items-center gap-1.5">
                 <span id="masteredIconBack">○</span>
                 <span id="masteredTextBack">Mark Mastered</span>
               </button>
@@ -335,6 +334,9 @@
               <div id="backAnswerContent" class="dynamic-a-text text-slate-100 font-medium space-y-3">
                 <!-- Populated dynamically with structured points -->
               </div>
+
+              <!-- Verify / doubtful-answer flag -->
+              <div id="backVerifyBox" class="verify-box hidden rounded-2xl bg-rose-500/10 border-2 border-rose-400/60 p-3.5 sm:p-4 text-rose-100 text-sm sm:text-base leading-relaxed"></div>
 
               <!-- Sketch Guide & SVG Diagram Container (Shown when card has a sketch/diagram) -->
               <div id="backSketchContainer" class="hidden mt-5 rounded-2xl bg-slate-950/90 border-2 border-sky-500/40 p-4 sm:p-5">
@@ -432,18 +434,53 @@
   <!-- FOOTER -->
   <footer class="border-t border-slate-900 bg-slate-950 py-5 px-4 text-center text-xs sm:text-sm text-slate-500">
     <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-      <span class="hidden sm:inline">MCEN3001 Machine Design — Complete Final Exam & Lecture 1–11 Theory Deck (28 Cards)</span>
+      <span class="hidden sm:inline">MCEN3001 Machine Design — Complete Final Exam & Lecture 1–11 Theory Deck (36 Cards)</span>
       <span class="sm:hidden text-slate-400">Your progress is saved on this device only.</span>
       <span class="text-slate-400 font-mono">Closed-Book Exam Prep • High-Visibility Mobile & PC Edition</span>
     </div>
   </footer>
 
   <!-- ================================================================= -->
-  <!-- APPLICATION DATA & LOGIC (ALL 28 FLASHCARDS + SVG EXAM SKETCHES)  -->
+  <!-- APPLICATION DATA & LOGIC (ALL 36 FLASHCARDS + SVG EXAM SKETCHES)  -->
   <!-- ================================================================= -->
   <script>
     // SVG Diagram Templates for Exam Sketch Questions
     const EXAM_SVGS = {
+      failureTheories: `
+        <svg viewBox="0 0 520 440" class="w-full max-w-xl h-auto font-sans">
+          <rect x="6" y="6" width="508" height="428" rx="14" fill="#0f172a" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+          <text x="22" y="30" fill="#94a3b8" font-size="13" font-weight="700">FAILURE ENVELOPES (σ3 = 0) — σ1 vs σ2, in units of Sy</text>
+          <!-- axes -->
+          <line x1="40" y1="230" x2="480" y2="230" stroke="#64748b" stroke-width="1.5"/>
+          <line x1="260" y1="55" x2="260" y2="415" stroke="#64748b" stroke-width="1.5"/>
+          <text x="484" y="234" fill="#cbd5e1" font-size="13" font-weight="700">σ1</text>
+          <text x="266" y="62" fill="#cbd5e1" font-size="13" font-weight="700">σ2</text>
+          <!-- Max normal stress: square -->
+          <rect x="130" y="100" width="260" height="260" fill="none" stroke="#38bdf8" stroke-width="3"/>
+          <!-- Max shear (Tresca): hexagon -->
+          <polygon points="390,230 390,100 260,100 130,230 130,360 260,360" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="3"/>
+          <!-- Distortion energy: ellipse rotated -45 -->
+          <ellipse cx="260" cy="230" rx="183.8" ry="106.1" transform="rotate(-45 260 230)" fill="none" stroke="#34d399" stroke-width="3"/>
+          <!-- shear diagonal -->
+          <line x1="150" y1="340" x2="370" y2="120" stroke="#475569" stroke-width="1" stroke-dasharray="4,4" transform="scale(1,1)"/>
+          <text x="36" y="76" fill="#94a3b8" font-size="11" font-style="italic">shear diagonal (σ1 = −σ2)</text>
+          <line x1="150" y1="120" x2="370" y2="340" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <!-- labels -->
+          <text x="394" y="96" fill="#38bdf8" font-size="12" font-weight="700">+Sy</text>
+          <text x="394" y="366" fill="#38bdf8" font-size="12" font-weight="700">(Sy, −Sy)</text>
+          <text x="82" y="96" fill="#38bdf8" font-size="12" font-weight="700">(−Sy, Sy)</text>
+          <text x="394" y="248" fill="#38bdf8" font-size="12" font-weight="700">Sy</text>
+          <text x="86" y="248" fill="#38bdf8" font-size="12" font-weight="700">−Sy</text>
+          <!-- legend -->
+          <rect x="310" y="388" width="14" height="4" fill="#38bdf8"/><text x="330" y="393" fill="#e2e8f0" font-size="11">Max normal (square)</text>
+          <rect x="310" y="402" width="14" height="4" fill="#fbbf24"/><text x="330" y="407" fill="#e2e8f0" font-size="11">Max shear / Tresca (hexagon)</text>
+          <rect x="310" y="416" width="14" height="4" fill="#34d399"/><text x="330" y="421" fill="#e2e8f0" font-size="11">Distortion energy / von Mises (ellipse)</text>
+          <!-- quadrant notes -->
+          <text x="60" y="400" fill="#fda4af" font-size="12" font-weight="700">Quadrants II &amp; IV:</text>
+          <text x="60" y="416" fill="#fda4af" font-size="11">square lies OUTSIDE the others</text>
+          <text x="60" y="430" fill="#fda4af" font-size="11">→ max normal is NON-CONSERVATIVE</text>
+        </svg>
+      `,
       lca: `
         <svg viewBox="0 0 680 260" class="w-full max-w-2xl h-auto font-sans">
           <rect x="8" y="8" width="664" height="244" rx="14" fill="#0f172a" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
@@ -720,9 +757,10 @@
         category: "L1 Design & LCA",
         isSampleExam: false,
         question: "What are the steps in the engineering design process of a product? Sketch their relationship.",
-        hint: "5 sequential forward steps with an 'Iteration / Improve the Design' feedback loop from Step 4 back to Step 2.",
+        hint: "RCPTCI — 6 steps; the Improve step is the feedback loop from Test &amp; Evaluate back to Create.",
         answerPoints: [
-          "<strong>5 Steps in Sequence:</strong><br>1) Recognize the Need → 2) Create a Design → 3) Prepare a Model → 4) Test and Evaluate the Model → 5) Communicate the Design."
+          "<strong>6 Steps — mnemonic RCPTCI:</strong><br>1) Recognise the need → 2) Create a design → 3) Prepare a model → 4) Test and evaluate the model → 5) Communicate the design → 6) Improve the design (iteration loop).",
+          "<strong>Relationship:</strong> Steps 1→5 run left-to-right; \"Improve the Design\" is the iteration loop that feeds back from Test &amp; Evaluate to Create a Design."
         ],
         sketchGuide: "Draw the 5 sequential blocks left-to-right and include a feedback loop from \"Test and Evaluate the Model\" passing through \"Improve the Design\" (Iteration) returning to \"Create a Design\".",
         svgKey: "designProcess"
@@ -733,6 +771,7 @@
         category: "L1 Design & LCA",
         isSampleExam: false,
         question: "Differentiate between Mechanical Design and Machine Design.",
+        verify: "Examples (engines, gearboxes) are standard textbook illustrations, not from your notes; the two-stem definition IS from your notes.",
         hint: "Compare the two stems of Mechanical Engineering: Energy vs. Structures & Motion.",
         answerPoints: [
           "<strong>Two Stems of Mechanical Engineering:</strong><br>1) <em>Energy</em> (thermodynamics, heat transfer, combustion)<br>2) <em>Structures and motion</em> (strength of materials, solid mechanics, kinematics, dynamics).",
@@ -764,7 +803,8 @@
         answerPoints: [
           "<strong>Even Material:</strong> Equal tensile and compressive strengths (typical of ductile materials).",
           "<strong>Uneven Material:</strong> Different tensile and compressive strengths (typical of brittle materials, which are much stronger in compression than tension).",
-          "<strong>Why Brittle FoS is 2× Ductile FoS:</strong> Brittle fracture is sudden and catastrophic without prior plastic deformation warning, and brittle materials cannot yield locally to relieve stress concentrations or internal flaws."
+          "<strong>Why Brittle FoS is 2× Ductile FoS:</strong> Brittle fracture is sudden and catastrophic without prior plastic deformation warning, and brittle materials cannot yield locally to relieve stress concentrations or internal flaws.",
+          "<strong>Rule of thumb (lecture notes):</strong> <code>SF<sub>brittle</sub> = 2 × max(F1, F2, F3)</code> — brittle materials are designed against ultimate strength and fail by fracture with no visible warning."
         ]
       },
       {
@@ -789,9 +829,9 @@
         question: "Major mechanical failures, yielding failure, FoS definition, and failure prediction methods for ductile vs. brittle materials.",
         hint: "Yielding vs fracture; FoS = Strength / Allowable Stress; von Mises/Tresca for ductile; Normal Stress/Mohr for brittle.",
         answerPoints: [
-          "<strong>Major Mechanical Failures:</strong> Elastic deflection, yielding (permanent plastic deformation when stress exceeds yield strength <em>Sy</em> while remaining in one piece), fracture (separation into pieces when stress exceeds ultimate strength <em>Su</em>), fatigue, buckling, and rapid fracture.",
+          "<strong>Major Mechanical Failures:</strong> Yielding, fracture, fatigue, rapid fracture, buckling (notes list these five). Also elastic deflection. <em>Yielding</em> = permanent plastic deformation when stress exceeds yield strength <em>Sy</em> (bending, tension, compression, torsion or shear); the part does <strong>not</strong> return to its original shape when the load is removed.",
           "<strong>Factor of Safety (FoS):</strong> <code>FoS = Material Strength / Allowable Stress</code>.",
-          "<strong>Ductile Static Theories:</strong> Maximum Distortion Energy Theory (von Mises) or Maximum Shear Stress Theory (Tresca).",
+          "<strong>Ductile Static Theories (Tute 2):</strong> Maximum Distortion Energy Theory (von Mises) is the <strong>best</strong>; Maximum Shear Stress (Tresca) <em>may be acceptable</em> (slightly conservative); Maximum Normal Stress theory is <strong>not acceptable</strong> for ductile materials.",
           "<strong>Brittle Static Theories:</strong> Maximum Normal Stress Theory or Modified/Coulomb Mohr.",
           "<strong>Fluctuating Ductile Theories:</strong> Goodman, Gerber, or Soderberg."
         ]
@@ -857,7 +897,7 @@
         answerPoints: [
           "<strong>Pressure Angle (φ):</strong> Angle between the line of action (common normal) and the common tangent to the pitch circles at the pitch point.",
           "<strong>Effect of Increased Centre Distance:</strong> Increasing installed centre distance <em>C</em> <strong>increases</strong> the operating pressure angle φ because base circle radii (<code>rb = r cos φ</code>) are fixed.",
-          "<strong>Contact Ratio:</strong> Average number of pairs of teeth in contact simultaneously (must be <code>≥ 1.2</code> for smooth operation)."
+          "<strong>Contact Ratio (CR):</strong> Average number of pairs of teeth in contact = <strong>length of line of action ÷ base pitch</strong> (<code>CR = Z / pb</code>). A second pair must engage before the first pair disengages, so CR must exceed 1 (design rule: <code>≥ 1.2</code>) for smooth operation."
         ],
         sketchGuide: "Sketch two meshing pitch circles, the horizontal common tangent through Pitch Point P, and the inclined Line of Action (common normal) at angle φ.",
         svgKey: "pressureAngle"
@@ -869,6 +909,7 @@
         isSampleExam: true,
         marks: "3 Marks (Sketch)",
         question: "Velocity Ratio vs. Train Value, idler gear functions, compound gears, and reverted gear trains.",
+        verify: "The specific stage ratios in the sketch guide (+6:1, +3.5:1, −4:1) come from the sample exam question, not your PDF. N1+N2 = N3+N4 holds only if all gears share the same module/pitch.",
         hint: "Single pair vs overall train; idlers reverse direction and bridge space; reverted trains have coaxial shafts (C1 = C2).",
         answerPoints: [
           "<strong>Velocity Ratio vs. Train Value:</strong> Velocity Ratio applies to a single gear pair; Train Value is the overall speed ratio across an entire train (<code>+</code> if input/output rotate same direction, <code>−</code> if opposite).",
@@ -884,13 +925,14 @@
         category: "L5-L7 Shafts & Bearings",
         isSampleExam: false,
         question: "Shaft vs. axle, shaft mounting configurations, torque transmission elements, axial positioning, and critical stress concentration locations.",
+        verify: "Shaft vs axle is NOT in your PDF. Textbook version: a shaft transmits torque; an axle carries bending only and does not transmit torque (axles can still rotate, e.g. railway axles). Mountings/axial-location lists are lecture material I could not check against your PDF.",
         hint: "Rotating torque carrier vs stationary beam; straddle vs cantilever; keys/splines vs shoulders/circlips.",
         answerPoints: [
           "<strong>Shaft vs. Axle:</strong> A shaft rotates to transmit power and torque; an axle is a stationary beam supporting rotating elements without carrying torque.",
           "<strong>Mountings:</strong> Straddle-mounted (between bearings) or overhung/cantilevered.",
           "<strong>Torque Transfer Elements:</strong> Keys, splines, pins, press/shrink fits, tapered fits.",
           "<strong>Axial Location Components:</strong> Shoulders, collars, retaining rings (circlips), locknuts, sleeves.",
-          "<strong>Critical Stress Concentrations:</strong> Keyways, shoulder fillets, and retaining ring grooves; reduced by large fillet radii, relief grooves, or chamfers."
+          "<strong>Critical Stress Concentrations:</strong> Keyways, shoulder fillets, and retaining ring grooves; reduce with a <strong>large-radius undercut</strong>, <strong>shoulder relief groove</strong> or <strong>large-radius relief groove</strong>. (Retaining rings sit in grooves cut in the shaft.)"
         ]
       },
       {
@@ -903,8 +945,8 @@
         answerPoints: [
           "<strong>Bearing Load Types:</strong> Pure radial, pure thrust (axial), or combined radial and thrust load.",
           "<strong>Two Major Groups:</strong> Sliding bearings and Rolling element bearings (ball and roller).",
-          "<strong>Axial Load Bearings:</strong> Thrust ball/roller bearings, angular-contact ball bearings, and tapered roller bearings.",
-          "<strong>Brinelling:</strong> Permanent surface indentation of raceways caused by static overload or severe shock/impact that exceeds material yield strength."
+          "<strong>Axial Load Bearings (notes):</strong> 1) Angular-contact ball bearings, 2) Double-row deep-groove ball bearings, 3) Tapered roller bearings. (Thrust ball/roller bearings also carry pure axial load.)",
+          "<strong>Brinelling:</strong> If a bearing carries a heavy load while <strong>not rotating</strong>, the balls/rollers slightly indent the rings. The marks resemble those made by a Brinell hardness tester. Result: noise, vibration and heat as the rolling elements pass the local discontinuities in the raceway."
         ]
       },
       {
@@ -913,11 +955,13 @@
         category: "L5-L7 Shafts & Bearings",
         isSampleExam: false,
         question: "Bearing life, rating life (L10), basic dynamic radial load rating (C), and reliability factor (Kr).",
+        verify: "Notes write the life exponent as 3.33 (roller bearings); textbook uses 3 for ball and 10/3 (=3.33) for roller bearings. Kr = 0.33 for 98% reliability comes from the sample exam, not your PDF.",
         hint: "Spalling fatigue threshold; L10 = 90% survival; C = load for LR revolutions at 90%; Kr adjusts for >90% reliability.",
         answerPoints: [
-          "<strong>Bearing Life:</strong> Total revolutions (or hours at constant speed) before the first evidence of fatigue spalling develops.",
+          "<strong>Bearing Life:</strong> Number of revolutions (or hours at a standard angular speed) until the <strong>first tangible evidence of fatigue</strong>. Application needs (1) a reasonable life and (2) enough reliability — e.g. 10% (or 1%) probability of early failure.",
           "<strong>Rating Life (L10):</strong> Revolutions/hours that <strong>90%</strong> of a group of identical bearings will complete or exceed before fatigue failure.",
           "<strong>Basic Dynamic Load Rating (C):</strong> Constant radial load a group of bearings can carry for a catalog rating life of <em>LR</em> (e.g., <code>90 × 10⁶</code> or <code>10⁶</code> revolutions) with 90% reliability.",
+          "<strong>Life equations (notes):</strong> <code>L = LR (C / Fr)^3.33</code> and <code>C = (L / LR)^0.3 · Fr</code>, where <em>C</em> = rated capacity, <em>LR</em> = rated life (9×10⁷ rev), <em>Fr</em> = radial load, <em>L</em> = required life.",
           "<strong>Reliability Factor (Kr):</strong> Adjusts <em>L10</em> rating life for required reliabilities higher than 90% (e.g., <code>Kr = 0.33</code> for 98% reliability / 2% failure in Sample Exam Q1.3)."
         ]
       },
@@ -928,12 +972,14 @@
         isSampleExam: true,
         marks: "3 Marks (Part 1)",
         question: "Partial bearings definition, adhesive vs. abrasive wear, lubrication regimes (ranked), EHL, and plain bearing lubrication mechanisms.",
-        hint: "Sleeve wraps <360° (60°–180°); welding vs ploughing; rank from Hydrodynamic down to Boundary.",
+        verify: "Ranking of EHL vs hydrodynamic is arguable (both very low friction). Your notes only give boundary / mixed / hydrodynamic, so if asked, rank Hydrodynamic > Mixed > Boundary and mention EHL separately.",
+        hint: "Sleeve wraps <360° (60°–180°); welding vs ploughing; rank from Hydrodynamic down to Boundary; 2 supply methods: oil hole in shaft, oil groove in bearing.",
         answerPoints: [
-          "<strong>Partial Bearing (Sample Exam Q2.1):</strong> A journal bearing where the bearing sleeve wraps only partially (less than 360°, typically 60°–180°) around the journal to support unidirectional radial loads with lower friction.",
+          "<strong>Partial Bearing (Sample Exam Q2.1):</strong> Used where the radial load is <strong>always in one direction</strong> (e.g. rail freight car axle bearings): the bearing surface extends only part way round the periphery of the journal, not the full 360°.",
           "<strong>Wear Types:</strong> <em>Adhesive wear</em> is metal-to-metal welding/tearing at asperities; <em>abrasive wear</em> is ploughing by hard foreign particles or hard asperities.",
           "<strong>Lubrication Regimes Ranked by Lowest Friction (Best to Worst):</strong><br>1) Hydrodynamic / Hydrostatic (thick film)<br>2) Elasto-hydrodynamic (EHL — high local contact pressure elastically deforms surfaces and spikes lubricant viscosity)<br>3) Mixed film<br>4) Boundary lubrication.",
-          "<strong>Plain Bearing Mechanisms:</strong> Hydrodynamic (self-acting wedge) and Hydrostatic (externally pressurized pump)."
+          "<strong>Two Ways to Supply Lubricant to a Plain Bearing (Wk 7 Q5):</strong> (a) <strong>oil hole in the shaft</strong> (oil cup / lubricating fitting), (b) <strong>oil groove in the bearing</strong> (oil pocket).",
+          "<strong>Film generation:</strong> Hydrodynamic (self-acting wedge from rotation) vs hydrostatic (externally pressurised pump)."
         ]
       },
       {
@@ -946,6 +992,7 @@
         hint: "Le / rho; Johnson parabola vs Euler hyperbola; Tangent Point occurs at critical stress = Sy / 2.",
         answerPoints: [
           "<strong>Slenderness Ratio:</strong> <code>Le / ρ</code> (effective length divided by radius of gyration <code>ρ = √(I/A)</code>).",
+          "<strong>Short vs. Long (notes):</strong> A column is 'short' if <code>Le/ρ &lt; ~10</code> (Johnson's equation). Long columns buckle laterally when axial load exceeds the critical buckling load (Euler: <code>Pcr = π²EI / Le²</code>). Above the tangent point = long (Euler); below it (but above 10) = intermediate (Johnson).",
           "<strong>Short/Intermediate vs. Long Columns:</strong> Short/intermediate columns fail by inelastic yielding/buckling (Johnson parabola); long slender columns fail by elastic instability (Euler hyperbola).",
           "<strong>Effective Length (Le):</strong> Length between inflection points (zero moment) based on end restraints: Pinned-Pinned <code>Le = L</code>, Fixed-Fixed <code>Le = 0.5L</code>, Fixed-Pinned <code>Le = 0.707L</code>, Fixed-Free <code>Le = 2L</code>."
         ],
@@ -960,10 +1007,10 @@
         question: "Spring free vs. working length, parallel vs. series springs, aspect ratio, and clash allowance.",
         hint: "Unloaded vs operating length; parallel adds k, series adds 1/k; Lf/D governs buckling; 10-15% margin before solid length.",
         answerPoints: [
-          "<strong>Free vs. Working Length:</strong> Free length (<em>Lf</em>) is unloaded length; working length (<em>Lw</em>) is length under operating load.",
+          "<strong>Free vs. Working Length:</strong> Free length (<em>Lf</em>) is the overall length of the spring when <strong>unloaded</strong>. Minimum working length (<em>Lm</em>) is the <strong>shortest</strong> length the spring is compressed to in service (at maximum working load).",
           "<strong>Parallel vs. Series Springs:</strong> Parallel springs share load (<code>keq = k1 + k2</code>); series springs share deflection (<code>1/keq = 1/k1 + 1/k2</code>).",
-          "<strong>Aspect Ratio:</strong> <code>Lf / D</code> (free length to mean coil diameter), which governs compression spring buckling (buckles if <code>Lf/D > ~4–5</code> depending on end conditions).",
-          "<strong>Clash Allowance:</strong> Margin of extra deflection (typically <strong>10–15%</strong> of working deflection) between maximum operating length and solid length (<em>Ls</em>) to prevent coils clashing solid."
+          "<strong>Aspect Ratio:</strong> <code>Lf / D</code> (free length ÷ mean coil diameter). If it is greater than <strong>4</strong> the spring may buckle (notes).",
+          "<strong>Clash Allowance (Yclash):</strong> The difference between the <strong>minimum working length (Lm)</strong> and the <strong>shut (solid) height (Ls)</strong>, expressed as a percentage of the working deflection. Recommended minimum <strong>10–15%</strong>, so the coils never clash solid."
         ],
         sketchGuide: "Sketch two springs side-by-side sharing a load plate for Parallel (keq = k1 + k2), and two springs stacked end-to-end for Series (1/keq = 1/k1 + 1/k2).",
         svgKey: "springsParallelSeries"
@@ -974,13 +1021,14 @@
         category: "L8-L11 Columns, Springs, Flywheels & Belts",
         isSampleExam: true,
         marks: "5 Marks",
-        question: "Flywheel function, mass placement, failure mode, containment enclosure, and four shaft mounting methods.",
-        hint: "Kinetic energy reservoir (1/2 I ω²); rim maximizes I = mr²; centrifugal tensile burst; 4 hub-to-shaft connections.",
+        question: "Flywheel function, mass placement, likely failure modes, containment enclosure, and the six methods of mounting a flywheel on a shaft.",
+        hint: "Kinetic energy reservoir (1/2 I ω²); rim maximizes I = mr²; likely failures = fretting at hub + shaft fatigue; 6 mounting methods.",
         answerPoints: [
-          "<strong>Function:</strong> Acts as a mechanical energy reservoir to smooth out shaft speed fluctuations caused by torque variations over a work cycle.",
+          "<strong>Function:</strong> An inertial energy-storage device that smooths out variations in shaft speed: it absorbs energy by increasing angular velocity and returns it by slowing down. Keeps speed within an acceptable range despite torque fluctuations in the source (driver) and/or the load.",
           "<strong>Mass Placement:</strong> Placed at the outer rim (away from axis) to maximize mass moment of inertia <em>I</em> (since <code>Ek = ½ I ω²</code> and <code>I = m r²</code>).",
-          "<strong>Likely Failure Mode & Containment:</strong> Tensile burst fracture from centrifugal hoop/radial stresses (analogous to a thick-walled cylinder), plus shaft fatigue or hub fretting. A containment enclosure prevents high-energy shrapnel hazards if the flywheel bursts.",
-          "<strong>Four Shaft Mounting Methods:</strong><br>1) Keyed connection (with keyway/setscrew)<br>2) Press/interference fit (e.g., reinforcing hub on raised pad)<br>3) Split hub clamped with bolts<br>4) Flanged/bolted hub or tapered bushing/ring connection."
+          "<strong>Why a containment enclosure:</strong> Mass at large radius gives very large centrifugal (tangential and radial) stresses and a potential for the rotor to burst into pieces. Fragments leave at high velocity (high stored energy, whatever the material), so high-speed rotors must be surrounded by a containment enclosure to stop flying shrapnel.",
+          "<strong>Most Likely Failure Modes (notes):</strong> 1) Fretting wear / fretting fatigue at the flywheel–shaft mounting interface. 2) Fatigue failure of the shaft from cyclic torsion or imbalance-induced cyclic bending.",
+          "<strong>Six Ways to Mount a Flywheel on a Shaft:</strong><br>1) Interference fit<br>2) Raised pad &amp; interference fit<br>3) Tapered connection<br>4) Tapered-ring connection<br>5) Non-penetrating rings (retention screws)<br>6) Reinforced hub &amp; interference fit"
         ]
       },
       {
@@ -989,6 +1037,7 @@
         category: "L8-L11 Columns, Springs, Flywheels & Belts",
         isSampleExam: false,
         question: "Belt drive advantages, elastic creep, and four common belt drive configurations.",
+        verify: "Belt drives are NOT in your PDF (it covers Lectures 1–11 weeks 1–11 only). Content is general knowledge; the exact list of four configurations may differ from your lecture slides — please check against them.",
         hint: "Long centre distance & shock absorption; tight-to-slack tension change causes belt stretch/contraction slip.",
         answerPoints: [
           "<strong>Belt Drive Advantages:</strong> Transmits power over long centre distances, absorbs shock loads, damps/isolates vibration, and reduces cost.",
@@ -1002,12 +1051,15 @@
         category: "L8-L11 Columns, Springs, Flywheels & Belts",
         isSampleExam: true,
         marks: "3 Marks",
-        question: "Would buckling problems be encountered if one end of a compression spring is free to tip? Explain why.",
-        hint: "Compare column end conditions: fixed-guided vs. fixed-free (where effective length Le doubles to 2 Lf).",
+        question: "Would buckling problems be encountered if one end of a compression spring is free to tip? How can buckling of long helical compression springs be prevented?",
+        verify: "The exact aspect-ratio limits (e.g. 5.2 for parallel ends) are from the Shigley spring buckling chart and are not in your PDF. For the exam, rely on the qualitative answer: yes, free-to-tip buckles at a smaller aspect ratio.",
+        hint: "End conditions matter like columns; fix = guide the spring in a cylinder, but friction loses force.",
         answerPoints: [
           "<strong>Direct Exam Answer:</strong> <strong>Yes</strong>, buckling problems are much more likely to be encountered if one end of the spring is free to tip.",
-          "<strong>Mechanical Explanation:</strong> Just like a column with one end fixed and one end free (<code>Le = 2L</code>), allowing one end of a helical compression spring to tip doubles its effective length (or shifts it to the worst-case buckling curve on the <code>δ/Lf</code> vs. <code>Lf/D</code> stability chart).",
-          "<strong>Design Check:</strong> On the spring buckling stability chart, a spring with parallel guided ends is stable up to <code>Lf/D ≈ 5.2</code>, whereas if one end is free to tip/rotate, buckling occurs at a much smaller aspect ratio (<code>Lf/D > 2.6</code>)."
+          "<strong>Mechanical Explanation:</strong> Just like a column, the end constraints strongly affect the tendency to buckle. If one end is free to tip, the spring buckles at a smaller aspect ratio than if it is held against parallel plates at each end.",
+          "<strong>Design Check:</strong> A spring with both ends held parallel (constrained) is stable up to roughly <code>Lf/D ≈ 5</code>; if one end is free to tip it buckles at a <strong>much smaller aspect ratio</strong>.",
+          "<strong>Preventing Buckling (S3):</strong> Place the spring <strong>inside or outside a cylinder</strong> (rod/tube) with a small clearance.",
+          "<strong>Problem with that fix:</strong> The coils <strong>rub on the cylinder walls</strong>; friction takes some of the spring force to ground, <strong>reducing the load delivered at the spring end</strong>."
         ]
       },
       {
@@ -1029,6 +1081,7 @@
         isSampleExam: true,
         marks: "10 Marks (Context)",
         question: "Explain Splines, Woodruff keys, Gib-head keys, and how ISO Hole-Basis Fit designations (e.g., 10H7/u6 or 34H11/c11) work.",
+        verify: "ISO hole-basis fits (H7/u6 etc.) are not in your PDF; splines/Woodruff/Gib-head keys are. The fits explanation is standard ISO 286 but check the deviation formulas against your lecture slides.",
         hint: "Capital H = Hole basis (Dmin = Basic size); lowercase letter = shaft fundamental deviation (c = clearance, s/u = interference).",
         answerPoints: [
           "<strong>Splines:</strong> Multiple axial teeth machined around the shaft periphery meshing with hub grooves for high torque and axial sliding.",
@@ -1042,6 +1095,7 @@
         category: "L5-L7 Shafts & Bearings",
         isSampleExam: false,
         question: "State the assumptions of Petroff's Equation and how viscosity (μ), speed (N), and unit load (P) affect hydrodynamic film thickness.",
+        verify: "Petroff's equation is not in your PDF. Assumptions and formula f = 2π²(μN/P)(r/c) are standard (N in rev/s) but verify against your lecture slides.",
         hint: "Concentric journal, zero eccentricity/light load, Newtonian laminar oil film; Bearing characteristic number μN/P.",
         answerPoints: [
           "<strong>Petroff's Equation Assumptions:</strong><br>1) Journal and bearing bushing are concentric (zero eccentricity <code>e = 0</code>).<br>2) Bearing carries negligible/very light radial load.<br>3) End leakage of lubricant is negligible and laminar Newtonian flow applies.",
@@ -1055,6 +1109,7 @@
         category: "L8-L11 Columns, Springs, Flywheels & Belts",
         isSampleExam: false,
         question: "Why is the Tangent Point verification check mandatory when sizing columns, and how are eccentrically loaded columns analyzed?",
+        verify: "Secant formula and the verification procedure are from lecture/tute material, not your PDF. Tangent point itself (σcr = Sy/2) matches your notes.",
         hint: "Without checking Le/ρ against (Le/ρ)T, assuming Euler or Johnson is just an unverified guess!",
         answerPoints: [
           "<strong>Mandatory Column Verification Step:</strong> When designing a column for an unknown diameter <em>d</em>, the radius of gyration <code>ρ = d/4</code> is initially unknown. You must assume either Euler's or Johnson's equation, calculate <em>d</em>, compute the resulting <code>Le/ρ</code>, and <strong>verify it against the Tangent Point <code>(Le/ρ)T = √(2π²E / Sy)</code></strong>. If Euler was assumed but <code>Le/ρ < (Le/ρ)T</code>, you must recalculate using Johnson's equation!",
@@ -1067,11 +1122,131 @@
         category: "L8-L11 Columns, Springs, Flywheels & Belts",
         isSampleExam: false,
         question: "Why must belt drives be scheduled for regular inspection/maintenance, and what are the core principles of Design for Manufacturing (DFM)?",
+        verify: "Not in your PDF. DFM principles are standard but the exact wording/count in your lecture may differ — check your slides.",
         hint: "Belts stretch, creep, wear, and age over finite lives; DFM minimizes part count and uses standard components.",
         answerPoints: [
           "<strong>Why Belt Drives Require Scheduled Inspection:</strong> Unlike gears, elastomeric belts suffer progressive stretch, wear, environmental aging/cracking, and loss of initial tension over a finite service life, requiring periodic tensioning and replacement.",
           "<strong>Core Principles of Design for Manufacturing (DFM - Lecture 1):</strong><br>1) Minimize total number of parts.<br>2) Standardize components and materials.<br>3) Design parts for ease of fabrication and foolproof assembly.<br>4) Specify the widest practical tolerances and surface finishes consistent with function."
         ]
+      },
+      {
+        id: 29,
+        source: "L2 Q4, Q6, Q8 / Tute 2",
+        category: "L2 Failure & FoS",
+        isSampleExam: false,
+        question: "Sketch and compare the five failure theories. Why is the maximum normal stress theory dangerously non-conservative in some situations, and which theory suits ductile materials?",
+        hint: "Square vs hexagon vs ellipse on the σ1–σ2 plane; the square sticks out in the 2nd and 4th quadrants.",
+        answerPoints: [
+          "<strong>Five Failure Theories:</strong> 1) Maximum principal (normal) stress, 2) Maximum shear stress (Tresca), 3) Maximum principal strain, 4) Maximum total strain energy, 5) Distortion energy (von Mises).",
+          "<strong>Plane-stress picture (σ3 = 0):</strong> Max normal stress = <strong>square</strong> (±Sy); Max shear = <strong>hexagon</strong>; Distortion energy = <strong>ellipse</strong> through the hexagon corners. Pure shear (σ1 = −σ2) is the shear diagonal; yield at <code>0.577 Sy</code> (distortion energy) vs <code>0.5 Sy</code> (max shear).",
+          "<strong>Non-conservative:</strong> In the <strong>second and fourth quadrants</strong> (σ1 and σ2 of opposite sign) the square lies <em>outside</em> the other envelopes, so max normal stress predicts safe while the other theories predict yielding.",
+          "<strong>Ductile materials (Tute 2):</strong> Distortion energy is the best; max shear may be acceptable; max normal stress is <strong>not</strong> acceptable."
+        ],
+        sketchGuide: "Draw σ1 (horizontal) and σ2 (vertical) axes. Draw the square (±Sy), the hexagon inscribed in it (shear diagonal through the 2nd/4th quadrants) and the ellipse passing through the hexagon corners. Label the 2nd and 4th quadrants as where max-normal is non-conservative.",
+        svgKey: "failureTheories"
+      },
+      {
+        id: 30,
+        source: "L2 Q6, Q7",
+        category: "L2 Failure & FoS",
+        isSampleExam: false,
+        question: "Define factor of safety, and differentiate between factor of safety and margin of safety.",
+        hint: "FoS = unitless ratio of same-unit quantities; notes distinguish particular component/conditions vs average component/conditions.",
+        verify: "The notes' margin-of-safety definition (average component, average conditions) is unusual. The textbook definition is MS = FoS − 1 (or (strength − stress)/stress). Write the notes' definition for this lecturer; add the textbook formula as a bonus if marks allow.",
+        answerPoints: [
+          "<strong>Factor of Safety (SF):</strong> A ratio of two quantities with the <strong>same units</strong> (e.g. strength/stress, critical load/applied load, load to failed part/expected service overload, max cycles/applied cycles, max safe speed/operating speed). It is always <strong>unitless</strong>.",
+          "<strong>FoS vs Margin of Safety (notes):</strong> Factor of safety relates to the failure point of a <em>particular component under particular conditions</em>; margin of safety relates to the failure of an <em>average component under average conditions</em>.",
+          "<strong>Textbook version (bonus):</strong> <code>Margin of Safety = FoS − 1</code>.",
+          "<strong>Brittle materials:</strong> <code>SF<sub>brittle</sub> = 2 × max(F1, F2, F3)</code>."
+        ]
+      },
+      {
+        id: 31,
+        source: "L5 Q3, Q5, Q6 / S6",
+        category: "L5-L7 Shafts & Bearings",
+        isSampleExam: false,
+        question: "Shaft design details: why keep axial distances between components minimal, what are common shaft materials, what geometric features cause stress concentrations and how can they be reduced?",
+        hint: "Small distances = small moment/deflection; steel (E same for all steels); sharp shoulders; undercut / relief grooves.",
+        answerPoints: [
+          "<strong>Why minimise axial distances:</strong> To reduce the <strong>moment and deflection</strong> induced in the shaft.",
+          "<strong>Common materials:</strong> <strong>Steel</strong> — most common, because its modulus of elasticity is essentially the same for all steels. <strong>Cast iron</strong> — if gears or other components are cast with the shaft. <strong>Bronze or stainless steel</strong> — sometimes for marine/corrosive environments.",
+          "<strong>Geometric stress raisers:</strong> Sharp shoulders (sharp radii), keyways, grooves.",
+          "<strong>Reducing stress concentrations:</strong> 1) Large-radius undercut, 2) Shoulder relief groove, 3) Large-radius relief groove. Also: shorten overall shaft length (less vibration, deflection and bending moment); build shoulders with retaining rings in grooves, sleeves between components or clamp collars; place necessary stress raisers away from highly stressed regions."
+        ],
+        sketchGuide: "Three shaft-and-bearing sketches: (a) sharp radius vs large-radius undercut, (b) shoulder relief groove, (c) large-radius relief groove — show stress flow lines smoothing out."
+      },
+      {
+        id: 32,
+        source: "L7 Q5 / Additional Wk 7 / L7 Q2",
+        category: "L5-L7 Shafts & Bearings",
+        isSampleExam: false,
+        question: "What are the two major mechanisms for lubricating plain bearings, and what are journal vs thrust bearings? What conditions are needed for hydrodynamic lubrication?",
+        hint: "Oil hole in shaft vs oil groove in bearing; journal = radial, thrust = axial; conformal surfaces + wedge.",
+        answerPoints: [
+          "<strong>Two lubrication supply mechanisms:</strong> (a) <strong>Oil hole in the shaft</strong> (fed via oil cup or lubricating fitting), (b) <strong>Oil groove in the bearing</strong> (oil pocket).",
+          "<strong>Journal (sleeve) bearings:</strong> Cylindrical; designed for <strong>radial</strong> loads; also available flanged.",
+          "<strong>Thrust bearings:</strong> Generally flat; designed to handle <strong>axial (axle) loads</strong>.",
+          "<strong>Hydrodynamic lubrication:</strong> A pressure develops between the surfaces so they are completely separated by a thin oil film — the ideal form, with very low friction and very high wear resistance. The surfaces must be <strong>conformal</strong> (fit snugly over a large area); meshing gears and ball/roller bearings are not conformal.",
+          "<strong>Boundary lubrication</strong> prevents seizure and drastically cuts wear compared with unlubricated bearings; used for heavy loads and low speeds (hinges, machine guide surfaces)."
+        ],
+        sketchGuide: "Left: shaft with an oil hole + oil cup. Right: bearing with an oil groove and oil pocket. Add the three lubrication sketches: hydrodynamic (surfaces separated), mixed (intermittent contact), boundary (continuous contact)."
+      },
+      {
+        id: 33,
+        source: "L10 Q1",
+        category: "L8-L11 Columns, Springs, Flywheels & Belts",
+        isSampleExam: false,
+        question: "What are the major types of failure in riveted joints?",
+        hint: "Bending, shear, net-plate tension, crushing, then two edge failures (shear-out and tear-out).",
+        answerPoints: [
+          "<strong>Six failure modes:</strong><br>a) Failure by <strong>bending</strong><br>b) Failure by <strong>pure shear</strong> of the rivet<br>c) <strong>Tensile failure</strong> of the net plate cross-section between rivets (rupture)<br>d) <strong>Crushing</strong> of the rivet or plate (compressive bearing failure)<br>e) Failure by <strong>edge-shearing</strong> at the rivet hole<br>f) Failure by <strong>edge-tearing</strong> at the rivet hole",
+          "<strong>Avoiding edge failures:</strong> Space the rivets <strong>at least 1.5 diameters away from the edge</strong>."
+        ],
+        sketchGuide: "Sketch a lap joint for each: bending (plates tilt), shear (rivet sheared), net-section tension (plate fractures through the hole row), crushing (hole elongates), edge-shear and edge-tear (hole too close to the plate edge)."
+      },
+      {
+        id: 34,
+        source: "L10 Q2, Q3 / Additional Wk 10",
+        category: "L8-L11 Columns, Springs, Flywheels & Belts",
+        isSampleExam: false,
+        question: "List three methods for securing semi-permanent joints and three for securing removable joints. What is the difference between a keyway and a key-seat?",
+        hint: "Weld/rivet/interference vs thread/cotter-pin/key-spline; keyway is in the hub, key-seat is in the shaft.",
+        verify: "Your notes title the first group 'Permanent/Semi-permanent joints'; the three methods are the same either way. The keyway/key-seat definitions follow the standard convention (key-seat in shaft, keyway in hub) which matches your notes.",
+        answerPoints: [
+          "<strong>Semi-permanent machine joints (3):</strong> 1) Weldments, brazed and soldered joints, 2) Riveted joints, 3) Interference fits.",
+          "<strong>Removable joints (3):</strong> 1) Threaded, 2) Cottered / pinned, 3) Key / splined.",
+          "<strong>Keyway:</strong> The groove in the <strong>hub, wheel or pulley</strong> with which the key mates (shaft and key are inserted into the hub).",
+          "<strong>Key-seat:</strong> The groove or channel cut in the <strong>shaft</strong> in which the key sits."
+        ],
+        sketchGuide: "Two-branch tree: Permanent/Semi-permanent → (Weldments/brazed/soldered, Riveted, Interference fits); Removable → (Threaded, Cottered/pinned, Key/splined). Draw a shaft + hub cross-section labelling key, keyway (hub) and key-seat (shaft)."
+      },
+      {
+        id: 35,
+        source: "Sample/Past Exam S4",
+        category: "L8-L11 Columns, Springs, Flywheels & Belts",
+        isSampleExam: true,
+        question: "Explain pre-setting (set removal) of mechanical springs. How is it done?",
+        hint: "Make the spring too long, then compress it to solid height so it yields to the right length.",
+        answerPoints: [
+          "<strong>Pre-setting / set removal:</strong> A process used in the manufacture of compression springs to induce <strong>useful residual stresses</strong>.",
+          "<strong>How it is done:</strong> Make the spring <strong>longer than required</strong>, then yield it to the desired length by <strong>compressing it to its solid height</strong>."
+        ]
+      },
+      {
+        id: 36,
+        source: "Sample/Past Exam S5, S9 / L6 Q2",
+        category: "L5-L7 Shafts & Bearings",
+        isSampleExam: true,
+        question: "What is the constructional difference between a single-row deep-groove (Conrad) and a single-row maximum-capacity (filling-notch) ball bearing, and how does it affect their function? What are the two types of rolling element bearing?",
+        hint: "Conrad = continuous shoulders (radial + thrust); filling notch = more balls (max radial, less thrust).",
+        verify: "S9 in your notes lists 'ball bearings (radial ball bearings, tapered ball bearings)' vs 'roller bearings (tapered roller bearings)'. 'Tapered ball' looks like a typo for tapered roller. The ball-vs-roller contact comparison (point vs line contact) is my addition, not from your PDF.",
+        answerPoints: [
+          "<strong>Single-row deep-groove (Conrad):</strong> Continuous shoulders (no filling notches). Supports <strong>radial loads and moderate thrust in either direction</strong>; the most widely used rolling bearing; inexpensive and smooth over a wide speed range. Assembly: move inner ring eccentric, insert balls, re-centre the inner race, space the balls evenly and fit the separator (cage).",
+          "<strong>Single-row maximum capacity (filling notch):</strong> A <strong>filling notch</strong> is cut into one side of each race so <strong>more balls</strong> can be inserted → maximum possible radial capacity, but <strong>thrust capacity is reduced</strong> by the shoulder discontinuities.",
+          "<strong>Self-aligning bearings:</strong> A spherical surface is ground to accommodate shaft misalignment/deflection when it is severe.",
+          "<strong>Two types of rolling element bearing:</strong> 1) Ball bearings, 2) Roller bearings (e.g. tapered roller). Roller contact is a line rather than a point, so rollers generally carry heavier loads."
+        ],
+        sketchGuide: "Sketch the deep-groove (Conrad) bearing cross-section with full shoulders, the filling-notch bearing with a notch on one race side, and the self-aligning bearing with a spherical outer race."
       }
     ];
 
@@ -1160,7 +1335,7 @@
         return `
           <button
             onclick="selectCategory('${cat.id}')"
-            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm border transition whitespace-nowrap flex items-center gap-1.5 ${activeClasses}"
+            class="shrink-0 px-3.5 py-2.5 sm:py-2 rounded-xl text-sm border transition whitespace-nowrap flex items-center gap-1.5 ${activeClasses}"
           >
             <span>${cat.label}</span>
             <span class="px-1.5 py-0.2 rounded-md text-xs font-mono ${isActive ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-slate-400'}">${count}</span>
@@ -1195,6 +1370,7 @@
         document.getElementById("backQuestionRecap").textContent = "No cards in current filter";
         document.getElementById("backAnswerContent").innerHTML = "<p>Switch category or disable 'To Review Only' filter above.</p>";
         document.getElementById("backSketchContainer").classList.add("hidden");
+        document.getElementById("backVerifyBox").classList.add("hidden");
         return;
       }
 
@@ -1211,6 +1387,7 @@
         examBadge.classList.add("hidden");
       }
 
+      document.getElementById("frontVerifyBadge").classList.toggle("hidden", !card.verify);
       document.getElementById("frontQuestionText").textContent = card.question;
       document.getElementById("frontHintText").textContent = card.hint || "Break the question into definition, key equations/mechanisms, and required sketch labels.";
 
@@ -1224,6 +1401,14 @@
         </div>
       `).join("");
       document.getElementById("backAnswerContent").innerHTML = answerHtml;
+      const verifyBox = document.getElementById("backVerifyBox");
+      if (card.verify) {
+        verifyBox.innerHTML = `<strong class="text-rose-300">⚠ Double-check this one:</strong> ${card.verify}`;
+        verifyBox.classList.remove("hidden");
+      } else {
+        verifyBox.classList.add("hidden");
+        verifyBox.innerHTML = "";
+      }
 
       // Sketch & SVG handling
       const sketchContainer = document.getElementById("backSketchContainer");
@@ -1254,11 +1439,11 @@
       const icon = document.getElementById(iconId);
       const txt = document.getElementById(textId);
       if (isMastered) {
-        btn.className = "px-3.5 py-1.5 rounded-xl font-extrabold text-xs sm:text-sm border border-emerald-400 bg-emerald-500/20 text-emerald-300 transition flex items-center gap-1.5";
+        btn.className = "px-3.5 py-2 rounded-xl font-extrabold text-xs sm:text-sm border border-emerald-400 bg-emerald-500/20 text-emerald-300 transition flex items-center gap-1.5";
         icon.textContent = "✓";
         txt.textContent = "Mastered";
       } else {
-        btn.className = "px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border border-slate-700 bg-slate-800/90 text-slate-300 hover:border-emerald-400 transition flex items-center gap-1.5";
+        btn.className = "px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm border border-slate-700 bg-slate-800/90 text-slate-300 hover:border-emerald-400 transition flex items-center gap-1.5";
         icon.textContent = "○";
         txt.textContent = "Mark Mastered (M)";
       }
@@ -1339,6 +1524,7 @@
                   ${card.category}
                 </span>
                 ${card.isSampleExam ? `<span class="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 font-extrabold text-xs uppercase">★ Sample Exam</span>` : ''}
+                ${card.verify ? `<span class="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-200 border border-rose-400/50 font-extrabold text-xs uppercase">⚠ Check</span>` : ''}
               </div>
 
               <div class="flex items-center gap-2">
@@ -1364,6 +1550,7 @@
               </summary>
               <div class="dynamic-list-a text-slate-100 font-medium mt-4 space-y-3">
                 ${answerPointsHtml}
+                ${card.verify ? `<div class="verify-box rounded-xl bg-rose-500/10 border-2 border-rose-400/60 p-3.5 text-rose-100 text-sm sm:text-base"><strong class="text-rose-300">⚠ Double-check this one:</strong> ${card.verify}</div>` : ''}
                 ${sketchHtml}
               </div>
             </details>
@@ -1373,10 +1560,19 @@
     }
 
     // Navigation & Interaction Handlers
+    function scrollToCard() {
+      const el = document.getElementById("flipModeSection");
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 8;
+        window.scrollTo({ top: Math.max(0, Math.min(top, window.scrollY)), behavior: "auto" });
+      }
+    }
+
     function flipCard() {
       if (activeDeck.length === 0) return;
       isFlipped = !isFlipped;
       renderCurrentCard();
+      scrollToCard();
     }
 
     function handleCardBodyClick(event) {
@@ -1392,6 +1588,7 @@
       isHintVisible = false;
       renderCurrentCard();
       updateProgressUI();
+      window.scrollTo(0, 0);
     }
 
     function prevCard() {
@@ -1401,6 +1598,7 @@
       isHintVisible = false;
       renderCurrentCard();
       updateProgressUI();
+      window.scrollTo(0, 0);
     }
 
     function toggleHint(event) {
@@ -1573,6 +1771,11 @@
         }
       }
     }, { passive: true });
+
+    // Offline support: cache the app so it still works with no signal
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+    }
 
     // Initialize Application on Load
     window.onload = function () {

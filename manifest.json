@@ -1,0 +1,12 @@
+{
+  "name": "MCEN3001 Flashcards",
+  "short_name": "MCEN3001",
+  "description": "MCEN3001 Machine Design exam theory flashcards",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
