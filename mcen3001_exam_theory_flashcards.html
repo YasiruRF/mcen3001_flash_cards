@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>MCEN3001 Machine Design — Exam Theory Flashcards</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono for crisp technical legibility -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom High-Visibility & 3D Flip Styling */
+    :root {
+      --card-scale: 1;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+
+    /* Font scaling modes for effortless reading on any screen */
+    body.text-size-normal {
+      --q-size: clamp(1.35rem, 2.5vw, 2rem);
+      --a-size: clamp(1.08rem, 1.6vw, 1.35rem);
+      --list-q-size: clamp(1.2rem, 1.8vw, 1.5rem);
+      --list-a-size: clamp(1.02rem, 1.3vw, 1.2rem);
+    }
+    body.text-size-large {
+      --q-size: clamp(1.6rem, 3.1vw, 2.45rem);
+      --a-size: clamp(1.22rem, 2vw, 1.55rem);
+      --list-q-size: clamp(1.35rem, 2.2vw, 1.75rem);
+      --list-a-size: clamp(1.15rem, 1.6vw, 1.38rem);
+    }
+    body.text-size-xl {
+      --q-size: clamp(1.85rem, 3.8vw, 2.85rem);
+      --a-size: clamp(1.38rem, 2.4vw, 1.8rem);
+      --list-q-size: clamp(1.55rem, 2.6vw, 2.05rem);
+      --list-a-size: clamp(1.28rem, 1.9vw, 1.6rem);
+    }
+
+    .dynamic-q-text {
+      font-size: var(--q-size);
+      line-height: 1.32;
+    }
+    .dynamic-a-text {
+      font-size: var(--a-size);
+      line-height: 1.58;
+    }
+    .dynamic-list-q {
+      font-size: var(--list-q-size);
+      line-height: 1.35;
+    }
+    .dynamic-list-a {
+      font-size: var(--list-a-size);
+      line-height: 1.6;
+    }
+
+    /* 3D Card Flip Container */
+    .perspective-container {
+      perspective: 1600px;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-style: preserve-3d;
+    }
+    .flip-card-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
+    .flip-card-face {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      width: 100%;
+    }
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    /* When flipped, let the active face dictate height smoothly */
+    .flip-card-inner:not(.is-flipped) .flip-card-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .flip-card-inner.is-flipped .flip-card-front {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* Custom Scrollbar for filter pills */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Keycap styling */
+    .kbd-key {
+      font-family: 'JetBrains Mono', monospace;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+
+<body class="text-size-large bg-slate-950 text-slate-50 dark:bg-slate-950 dark:text-slate-50 min-h-screen flex flex-col selection:bg-amber-400 selection:text-slate-950 transition-colors duration-200">
+
+  <!-- TOP STICKY NAVIGATION & CONTROLS HEADER -->
+  <header class="sticky top-0 z-40 bg-slate-900/95 dark:bg-slate-900/95 border-b border-slate-800 backdrop-blur-md shadow-lg">
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 py-3">
+      
+      <!-- Top Row: Title + Mode Switcher + Display Controls -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <!-- Brand / Course Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-slate-950 font-black text-lg shadow-md shrink-0">
+            M3
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">MCEN3001</span>
+              <span class="text-xs font-semibold text-emerald-400 hidden sm:inline-flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                100% Exam Theory Deck
+              </span>
+            </div>
+            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">
+              Machine Design Theory Flashcards
+            </h1>
+          </div>
+        </div>
+
+        <!-- View Mode Toggle & Utility Buttons -->
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Mode Switcher: Flip Mode vs All Cards List -->
+          <div class="inline-flex rounded-xl bg-slate-950 p-1 border border-slate-800" role="group" aria-label="View Mode">
+            <button id="btnModeFlip" onclick="setViewMode('flip')" class="px-3.5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all bg-amber-400 text-slate-950 shadow">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              <span>Card Flip</span>
+            </button>
+            <button id="btnModeList" onclick="setViewMode('list')" class="px-3.5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all text-slate-300 hover:text-white">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+              <span>All Cards List</span>
+            </button>
+          </div>
+
+          <!-- Font Size Scaler (A- / A / A+) -->
+          <div class="inline-flex rounded-xl bg-slate-950 p-1 border border-slate-800" title="Adjust Text Size for Mobile/PC Visibility">
+            <button onclick="setTextSize('normal')" id="sizeBtn-normal" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition">A</button>
+            <button onclick="setTextSize('large')" id="sizeBtn-large" class="px-2.5 py-1.5 rounded-lg text-sm font-extrabold bg-slate-800 text-amber-300 transition">A+</button>
+            <button onclick="setTextSize('xl')" id="sizeBtn-xl" class="px-2.5 py-1.5 rounded-lg text-base font-black text-slate-400 hover:text-white transition">A++</button>
+          </div>
+
+          <!-- High-Contrast Theme Toggle -->
+          <button onclick="toggleContrastTheme()" id="btnTheme" class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-200 hover:border-amber-400/50 hover:text-amber-300 transition" title="Switch Dark / Light High-Contrast Theme">
+            <svg id="iconSun" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Topic Filter Tabs (Scrollable horizontally on mobile, wrapped cleanly on PC) -->
+      <div class="mt-3 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1" id="topicTabsContainer" role="tablist">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-6 py-5 sm:py-8 flex flex-col">
+
+    <!-- PROGRESS & STATS BAR -->
+    <div class="mb-5 bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-md">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-2.5">
+        <div class="flex items-center gap-3">
+          <span id="progressCounterText" class="text-base sm:text-lg font-extrabold text-white font-mono">
+            Card 1 of 28
+          </span>
+          <span id="activeCategoryBadge" class="text-xs sm:text-sm font-bold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
+            All Topics
+          </span>
+        </div>
+
+        <!-- Mastery & Shuffle Action Controls -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="toggleFilterUnmastered()" id="btnFilterReview" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold border border-slate-700 bg-slate-800/80 text-slate-200 hover:border-amber-400 transition flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+            <span id="reviewFilterLabel">To Review Only: OFF</span>
+          </button>
+
+          <button onclick="shuffleDeck()" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold border border-slate-700 bg-slate-800/80 text-slate-200 hover:bg-slate-700 hover:text-amber-300 transition flex items-center gap-1.5" title="Shuffle current cards">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <span>Shuffle</span>
+          </button>
+
+          <button onclick="resetMastery()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-rose-400 transition" title="Reset mastered checkmarks">
+            Reset Progress (<span id="masteredCountBadge">0/28</span>)
+          </button>
+        </div>
+      </div>
+
+      <!-- Dual Progress Bar: Deck Position & Mastery -->
+      <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 p-0.5">
+        <div id="deckProgressBar" class="h-full bg-gradient-to-r from-amber-400 via-orange-400 to-emerald-400 rounded-full transition-all duration-300" style="width: 4%"></div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: INTERACTIVE 3D CARD FLIP MODE      -->
+    <!-- ========================================== -->
+    <section id="flipModeSection" class="flex-1 flex flex-col justify-between">
+      
+      <!-- 3D Flip Card Wrapper -->
+      <div id="touchCardZone" class="perspective-container w-full my-auto">
+        <div id="flipCardInner" class="flip-card-inner">
+
+          <!-- ==================== FRONT FACE (QUESTION) ==================== -->
+          <div id="cardFrontFace" onclick="handleCardBodyClick(event)" class="flip-card-face flip-card-front cursor-pointer rounded-3xl bg-gradient-to-b from-slate-900 to-slate-900/95 border-2 border-slate-700/90 hover:border-amber-400/70 shadow-2xl p-5 sm:p-9 md:p-12 flex flex-col justify-between min-h-[380px] sm:min-h-[450px] transition-colors">
+            
+            <!-- Card Header Metadata -->
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-4">
+              <div class="flex flex-wrap items-center gap-2">
+                <span id="frontCardNumber" class="px-3 py-1 rounded-lg bg-amber-400 text-slate-950 font-mono font-black text-sm sm:text-base">
+                  #1
+                </span>
+                <span id="frontSourceTag" class="px-3 py-1 rounded-lg bg-slate-800 text-amber-300 font-mono font-bold text-xs sm:text-sm border border-slate-700">
+                  Sample Exam Q1.1 / L1 Q4
+                </span>
+                <span id="frontExamBadge" class="hidden px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 font-extrabold text-xs uppercase tracking-wider">
+                  ★ Sample Exam Question
+                </span>
+              </div>
+
+              <!-- Mastered Status Button -->
+              <button onclick="toggleCurrentCardMastered(event)" id="btnMasteredFront" class="px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border border-slate-700 bg-slate-800/90 text-slate-300 hover:border-emerald-400 transition flex items-center gap-1.5">
+                <span id="masteredIconFront">○</span>
+                <span id="masteredTextFront">Mark Mastered</span>
+              </button>
+            </div>
+
+            <!-- Center Question Prompt -->
+            <div class="my-auto py-6 sm:py-10">
+              <div class="uppercase tracking-widest text-xs sm:text-sm font-extrabold text-amber-400 mb-3 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>Exam Theory Question</span>
+              </div>
+              <h2 id="frontQuestionText" class="dynamic-q-text font-extrabold text-white tracking-tight">
+                Loading question...
+              </h2>
+
+              <!-- Collapsible Hint Box -->
+              <div id="hintBoxContainer" class="hidden mt-6 p-4 sm:p-5 rounded-2xl bg-amber-500/15 border-2 border-amber-400/40 text-amber-100">
+                <div class="text-xs font-mono uppercase tracking-wider text-amber-300 font-bold mb-1">💡 Recall Hint:</div>
+                <p id="frontHintText" class="text-base sm:text-lg font-medium leading-relaxed"></p>
+              </div>
+            </div>
+
+            <!-- Card Footer: Hint Trigger & Flip Prompt -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
+              <button onclick="toggleHint(event)" id="btnShowHint" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-sm sm:text-base border border-slate-700 transition flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                <span id="hintBtnLabel">Show Hint (H)</span>
+              </button>
+
+              <div class="flex items-center gap-2 text-slate-300 font-bold text-sm sm:text-base group">
+                <span>Tap Card or Press <kbd class="kbd-key px-2 py-0.5 text-xs rounded bg-slate-800 border border-slate-600 text-amber-300">Space</kbd> to Flip Answer</span>
+                <svg class="w-5 h-5 text-amber-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== BACK FACE (MODEL ANSWER + SKETCH) ==================== -->
+          <div id="cardBackFace" onclick="handleCardBodyClick(event)" class="flip-card-face flip-card-back cursor-pointer rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-2 border-emerald-500/80 shadow-2xl p-5 sm:p-9 md:p-11 flex flex-col justify-between min-h-[380px] sm:min-h-[450px]">
+            
+            <!-- Back Header -->
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-3 py-1 rounded-lg bg-emerald-400 text-slate-950 font-mono font-black text-xs sm:text-sm uppercase tracking-wider">
+                  ✓ Full-Marks Model Answer
+                </span>
+                <span id="backSourceTag" class="px-3 py-1 rounded-lg bg-slate-800 text-slate-300 font-mono font-bold text-xs sm:text-sm border border-slate-700">
+                  Sample Exam Q1.1
+                </span>
+              </div>
+
+              <button onclick="toggleCurrentCardMastered(event)" id="btnMasteredBack" class="px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border border-slate-700 bg-slate-800 text-slate-200 hover:border-emerald-400 transition flex items-center gap-1.5">
+                <span id="masteredIconBack">○</span>
+                <span id="masteredTextBack">Mark Mastered</span>
+              </button>
+            </div>
+
+            <!-- Question Recap (Compact) -->
+            <div class="mt-3 mb-2 text-xs sm:text-sm font-bold text-slate-400 border-l-4 border-amber-400 pl-3 py-0.5" id="backQuestionRecap">
+              Question recap...
+            </div>
+
+            <!-- Main Model Answer Content -->
+            <div class="my-auto py-3 space-y-4">
+              <div id="backAnswerContent" class="dynamic-a-text text-slate-100 font-medium space-y-3">
+                <!-- Populated dynamically with structured points -->
+              </div>
+
+              <!-- Sketch Guide & SVG Diagram Container (Shown when card has a sketch/diagram) -->
+              <div id="backSketchContainer" class="hidden mt-5 rounded-2xl bg-slate-950/90 border-2 border-sky-500/40 p-4 sm:p-5">
+                <div class="flex items-center gap-2 text-sky-300 font-extrabold text-xs sm:text-sm uppercase tracking-wider mb-2">
+                  <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                  <span>Exam Sketch Guide (Draw & Label This for Full Marks):</span>
+                </div>
+                <p id="backSketchText" class="text-sm sm:text-base text-sky-100 font-medium leading-relaxed mb-3"></p>
+                <div id="backSketchSvgBox" class="w-full overflow-x-auto bg-slate-900 rounded-xl p-3 border border-slate-800 flex justify-center">
+                  <!-- Crisp inline SVG diagram injected here -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Back Footer -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800 mt-2">
+              <span class="text-xs sm:text-sm font-semibold text-emerald-300">
+                ★ Exam Tip: State all definitions clearly & label every axis/arrow on sketches!
+              </span>
+              <span class="text-xs sm:text-sm font-bold text-slate-400 flex items-center gap-1">
+                Tap anywhere to flip back to Question ↺
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- BOTTOM LARGE TOUCH/CLICK NAVIGATION BAR -->
+      <div class="mt-6 grid grid-cols-3 gap-3 sm:gap-4 items-center">
+        <button onclick="prevCard()" class="py-4 px-4 sm:px-6 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] border-2 border-slate-700 hover:border-amber-400/60 text-white font-extrabold text-base sm:text-lg flex items-center justify-center gap-2 shadow-lg transition">
+          <svg class="w-6 h-6 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          <span>Previous</span>
+          <kbd class="hidden md:inline-block kbd-key ml-1 px-2 py-0.5 text-xs rounded bg-slate-800 text-slate-300 border border-slate-600">←</kbd>
+        </button>
+
+        <button onclick="flipCard()" class="py-4 px-4 sm:px-6 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 active:scale-[0.99] text-slate-950 font-black text-base sm:text-xl flex items-center justify-center gap-2 shadow-xl transition">
+          <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span id="btnFlipMainLabel">Flip Card</span>
+        </button>
+
+        <button onclick="nextCard()" class="py-4 px-4 sm:px-6 rounded-2xl bg-slate-900 hover:bg-slate-800 active:scale-[0.99] border-2 border-slate-700 hover:border-amber-400/60 text-white font-extrabold text-base sm:text-lg flex items-center justify-center gap-2 shadow-lg transition">
+          <span>Next</span>
+          <kbd class="hidden md:inline-block kbd-key mr-1 px-2 py-0.5 text-xs rounded bg-slate-800 text-slate-300 border border-slate-600">→</kbd>
+          <svg class="w-6 h-6 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <!-- Keyboard & Touch Gesture Helper Legend -->
+      <div class="mt-4 text-center text-xs sm:text-sm text-slate-400 flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
+        <span class="inline-flex items-center gap-1.5"><kbd class="kbd-key px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Space</kbd> / <kbd class="kbd-key px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">Enter</kbd> Flip</span>
+        <span class="inline-flex items-center gap-1.5"><kbd class="kbd-key px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">←</kbd> <kbd class="kbd-key px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">→</kbd> Navigate</span>
+        <span class="inline-flex items-center gap-1.5"><kbd class="kbd-key px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">H</kbd> Toggle Hint</span>
+        <span class="inline-flex items-center gap-1.5"><kbd class="kbd-key px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">M</kbd> Mark Mastered</span>
+        <span class="inline-flex items-center gap-1 text-amber-300/90 sm:hidden">📱 Swipe Left/Right on card</span>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: ALL CARDS LIST VIEW (SCROLL/CRAM)  -->
+    <!-- ========================================== -->
+    <section id="listModeSection" class="hidden space-y-5">
+      
+      <!-- Search & Self-Test Answer Visibility Bar -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-md">
+        <div class="relative flex-1">
+          <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input
+            type="text"
+            id="listSearchInput"
+            oninput="renderListView()"
+            placeholder="Search any concept, formula, sketch, or lecture (e.g. backlash, LCA, tangent point, brinelling)..."
+            class="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-400 font-medium text-base focus:outline-none focus:border-amber-400"
+          />
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="toggleAllListAnswers(true)" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 font-bold text-xs sm:text-sm border border-slate-700 transition">
+            Show All Answers
+          </button>
+          <button onclick="toggleAllListAnswers(false)" class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs sm:text-sm border border-slate-700 transition">
+            Hide Answers (Self-Test)
+          </button>
+        </div>
+      </div>
+
+      <!-- Stacked Cards Container -->
+      <div id="listCardsContainer" class="space-y-5">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-900 bg-slate-950 py-5 px-4 text-center text-xs sm:text-sm text-slate-500">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span>MCEN3001 Machine Design — Complete Final Exam & Lecture 1–11 Theory Deck (28 Cards)</span>
+      <span class="text-slate-400 font-mono">Closed-Book Exam Prep • High-Visibility Mobile & PC Edition</span>
+    </div>
+  </footer>
+
+  <!-- ================================================================= -->
+  <!-- APPLICATION DATA & LOGIC (ALL 28 FLASHCARDS + SVG EXAM SKETCHES)  -->
+  <!-- ================================================================= -->
+  <script>
+    // SVG Diagram Templates for Exam Sketch Questions
+    const EXAM_SVGS = {
+      lca: `
+        <svg viewBox="0 0 680 260" class="w-full max-w-2xl h-auto font-sans">
+          <rect x="8" y="8" width="664" height="244" rx="14" fill="#0f172a" stroke="#334155" stroke-width="2" stroke-dasharray="6,4"/>
+          <text x="24" y="32" fill="#94a3b8" font-size="13" font-weight="700">LIFE CYCLE ASSESSMENT FRAMEWORK (ISO 14040)</text>
+          <!-- Left 3 stacked boxes -->
+          <rect x="35" y="48" width="260" height="48" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+          <text x="165" y="77" text-anchor="middle" fill="#f8fafc" font-size="14" font-weight="700">1. Goal Definition &amp; Scope</text>
+
+          <rect x="35" y="116" width="260" height="48" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+          <text x="165" y="145" text-anchor="middle" fill="#f8fafc" font-size="14" font-weight="700">2. Inventory Analysis</text>
+
+          <rect x="35" y="184" width="260" height="48" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2.5"/>
+          <text x="165" y="213" text-anchor="middle" fill="#f8fafc" font-size="14" font-weight="700">3. Impact Assessment</text>
+
+          <!-- Vertical double arrows between left boxes -->
+          <path d="M165 96 L165 116" stroke="#fbbf24" stroke-width="2.5"/>
+          <polygon points="165,96 160,103 170,103" fill="#fbbf24"/>
+          <polygon points="165,116 160,109 170,109" fill="#fbbf24"/>
+
+          <path d="M165 164 L165 184" stroke="#fbbf24" stroke-width="2.5"/>
+          <polygon points="165,164 160,171 170,171" fill="#fbbf24"/>
+          <polygon points="165,184 160,177 170,177" fill="#fbbf24"/>
+
+          <!-- Right tall Interpretation box -->
+          <rect x="355" y="48" width="145" height="184" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="2.5"/>
+          <text x="427" y="145" text-anchor="middle" fill="#ecfdf5" font-size="15" font-weight="800">4. Interpretation</text>
+
+          <!-- Horizontal two-way arrows -->
+          <path d="M295 72 L355 72" stroke="#fbbf24" stroke-width="2.5"/>
+          <polygon points="295,72 303,67 303,77" fill="#fbbf24"/>
+          <polygon points="355,72 347,67 347,77" fill="#fbbf24"/>
+
+          <path d="M295 140 L355 140" stroke="#fbbf24" stroke-width="2.5"/>
+          <polygon points="295,140 303,135 303,145" fill="#fbbf24"/>
+          <polygon points="355,140 347,135 347,145" fill="#fbbf24"/>
+
+          <path d="M295 208 L355 208" stroke="#fbbf24" stroke-width="2.5"/>
+          <polygon points="295,208 303,203 303,213" fill="#fbbf24"/>
+          <polygon points="355,208 347,203 347,213" fill="#fbbf24"/>
+
+          <!-- Direct Applications Box -->
+          <rect x="530" y="48" width="125" height="184" rx="8" fill="#1e293b" stroke="#94a3b8" stroke-width="2"/>
+          <text x="592" y="105" text-anchor="middle" fill="#cbd5e1" font-size="12" font-weight="700">Direct</text>
+          <text x="592" y="122" text-anchor="middle" fill="#cbd5e1" font-size="12" font-weight="700">Applications:</text>
+          <text x="592" y="148" text-anchor="middle" fill="#94a3b8" font-size="11">• Product Dev</text>
+          <text x="592" y="166" text-anchor="middle" fill="#94a3b8" font-size="11">• Strategic Plan</text>
+          <text x="592" y="184" text-anchor="middle" fill="#94a3b8" font-size="11">• Eco-Labelling</text>
+          <path d="M500 140 L530 140" stroke="#94a3b8" stroke-width="2.5"/>
+          <polygon points="530,140 522,135 522,145" fill="#94a3b8"/>
+        </svg>
+      `,
+      designProcess: `
+        <svg viewBox="0 0 740 210" class="w-full max-w-3xl h-auto font-sans">
+          <!-- 5 Main Steps -->
+          <g transform="translate(10,20)">
+            <rect x="0" y="0" width="115" height="64" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
+            <text x="57" y="28" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="700">1. Recognize</text>
+            <text x="57" y="46" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="700">the Need</text>
+
+            <path d="M115 32 L145 32" stroke="#fbbf24" stroke-width="2.5"/>
+            <polygon points="145,32 137,27 137,37" fill="#fbbf24"/>
+
+            <rect x="145" y="0" width="115" height="64" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
+            <text x="202" y="28" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="700">2. Create a</text>
+            <text x="202" y="46" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="700">Design</text>
+
+            <path d="M260 32 L290 32" stroke="#fbbf24" stroke-width="2.5"/>
+            <polygon points="290,32 282,27 282,37" fill="#fbbf24"/>
+
+            <rect x="290" y="0" width="115" height="64" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
+            <text x="347" y="28" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="700">3. Prepare a</text>
+            <text x="347" y="46" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="700">Model</text>
+
+            <path d="M405 32 L435 32" stroke="#fbbf24" stroke-width="2.5"/>
+            <polygon points="435,32 427,27 427,37" fill="#fbbf24"/>
+
+            <rect x="435" y="0" width="125" height="64" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2.2"/>
+            <text x="497" y="28" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="700">4. Test &amp; Evaluate</text>
+            <text x="497" y="46" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="700">the Model</text>
+
+            <path d="M560 32 L590 32" stroke="#fbbf24" stroke-width="2.5"/>
+            <polygon points="590,32 582,27 582,37" fill="#fbbf24"/>
+
+            <rect x="590" y="0" width="125" height="64" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="2.2"/>
+            <text x="652" y="28" text-anchor="middle" fill="#ecfdf5" font-size="12" font-weight="700">5. Communicate</text>
+            <text x="652" y="46" text-anchor="middle" fill="#ecfdf5" font-size="12" font-weight="700">the Design</text>
+
+            <!-- Iteration Loop -->
+            <rect x="285" y="115" width="135" height="54" rx="8" fill="#31102f" stroke="#f472b6" stroke-width="2.2"/>
+            <text x="352" y="139" text-anchor="middle" fill="#fbcfe8" font-size="12" font-weight="700">Improve the Design</text>
+            <text x="352" y="156" text-anchor="middle" fill="#f472b6" font-size="11" font-weight="700">(ITERATION)</text>
+
+            <path d="M497 64 L497 142 L420 142" fill="none" stroke="#f472b6" stroke-width="2.5"/>
+            <polygon points="420,142 428,137 428,147" fill="#f472b6"/>
+
+            <path d="M285 142 L202 142 L202 64" fill="none" stroke="#f472b6" stroke-width="2.5"/>
+            <polygon points="202,64 197,72 207,72" fill="#f472b6"/>
+          </g>
+        </svg>
+      `,
+      fatigueStress: `
+        <svg viewBox="0 0 680 200" class="w-full max-w-2xl h-auto font-sans">
+          <!-- Left Graph: Static Stress -->
+          <line x1="40" y1="160" x2="290" y2="160" stroke="#94a3b8" stroke-width="2"/>
+          <line x1="40" y1="25" x2="40" y2="175" stroke="#94a3b8" stroke-width="2"/>
+          <line x1="40" y1="75" x2="275" y2="75" stroke="#38bdf8" stroke-width="3.5"/>
+          <text x="160" y="22" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">Static Loading (Constant Stress)</text>
+          <text x="28" y="78" text-anchor="end" fill="#f8fafc" font-size="12">σ</text>
+          <text x="285" y="178" text-anchor="end" fill="#94a3b8" font-size="12">Time (t)</text>
+
+          <!-- Right Graph: Completely Reversed Bending Stress -->
+          <line x1="370" y1="100" x2="650" y2="100" stroke="#94a3b8" stroke-width="2"/>
+          <line x1="370" y1="25" x2="370" y2="175" stroke="#94a3b8" stroke-width="2"/>
+          <path d="M 370 100 Q 402 25, 435 100 T 500 100 T 565 100 T 630 100" fill="none" stroke="#fbbf24" stroke-width="3.2"/>
+          <text x="510" y="22" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="700">Completely Reversed Bending (σm = 0)</text>
+          <text x="358" y="55" text-anchor="end" fill="#34d399" font-size="11">+σmax</text>
+          <text x="358" y="104" text-anchor="end" fill="#94a3b8" font-size="11">0</text>
+          <text x="358" y="155" text-anchor="end" fill="#f87171" font-size="11">-σmin</text>
+          <text x="648" y="120" text-anchor="end" fill="#94a3b8" font-size="12">Time (t)</text>
+        </svg>
+      `,
+      pressureAngle: `
+        <svg viewBox="0 0 640 230" class="w-full max-w-2xl h-auto font-sans">
+          <!-- Pitch circles (partial arcs) -->
+          <circle cx="200" cy="255" r="140" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="6,4"/>
+          <circle cx="200" cy="-25" r="140" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="6,4"/>
+          <!-- Common tangent (horizontal) -->
+          <line x1="60" y1="115" x2="540" y2="115" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+          <text x="545" y="119" fill="#cbd5e1" font-size="12" font-weight="600">Common Tangent</text>
+          <!-- Line of Action (inclined at phi = 20 deg) -->
+          <line x1="75" y1="168" x2="515" y2="30" stroke="#fbbf24" stroke-width="3"/>
+          <text x="485" y="24" text-anchor="end" fill="#fbbf24" font-size="13" font-weight="700">Line of Action (Common Normal)</text>
+          <!-- Pitch Point P -->
+          <circle cx="245" cy="115" r="6" fill="#f43f5e"/>
+          <text x="245" y="140" text-anchor="middle" fill="#fda4af" font-size="13" font-weight="800">Pitch Point (P)</text>
+          <!-- Angle Arc for phi -->
+          <path d="M 335 115 A 90 90 0 0 0 329 88" fill="none" stroke="#34d399" stroke-width="3"/>
+          <text x="375" y="105" fill="#34d399" font-size="15" font-weight="800">Pressure Angle φ</text>
+          <text x="105" y="92" fill="#38bdf8" font-size="12" font-weight="700">Pitch Circles</text>
+        </svg>
+      `,
+      revertedTrain: `
+        <svg viewBox="0 0 680 250" class="w-full max-w-2xl h-auto font-sans">
+          <!-- Coaxial Input & Output Shaft Axis -->
+          <line x1="30" y1="75" x2="650" y2="75" stroke="#38bdf8" stroke-width="2" stroke-dasharray="8,4"/>
+          <!-- Countershaft Axis -->
+          <line x1="90" y1="185" x2="610" y2="185" stroke="#94a3b8" stroke-width="2" stroke-dasharray="8,4"/>
+
+          <!-- Input Shaft & N1 -->
+          <rect x="55" y="67" width="85" height="16" fill="#475569"/>
+          <rect x="120" y="42" width="28" height="66" rx="4" fill="#0284c7" stroke="#bae6fd" stroke-width="2"/>
+          <text x="80" y="55" fill="#38bdf8" font-size="12" font-weight="800">INPUT</text>
+          <text x="134" y="34" text-anchor="middle" fill="#f8fafc" font-size="12" font-weight="700">Pinion N1</text>
+
+          <!-- Output Shaft & N4, N6, N8 -->
+          <rect x="230" y="67" width="380" height="16" fill="#475569"/>
+          <text x="615" y="58" text-anchor="end" fill="#34d399" font-size="12" font-weight="800">OUTPUT (In-Line)</text>
+
+          <!-- Countershaft bar -->
+          <rect x="105" y="177" width="470" height="16" fill="#64748b"/>
+          <text x="340" y="236" text-anchor="middle" fill="#cbd5e1" font-size="12" font-weight="700">COUNTERSHAFT (C1 = C2 Across All Stages)</text>
+
+          <!-- Gear N2 on countershaft -->
+          <rect x="120" y="110" width="28" height="115" rx="4" fill="#0369a1" stroke="#bae6fd" stroke-width="2"/>
+          <text x="108" y="155" text-anchor="end" fill="#bae6fd" font-size="12" font-weight="700">Gear N2</text>
+
+          <!-- Stage 2 Forward (N3 & N4) -->
+          <rect x="265" y="30" width="28" height="90" rx="4" fill="#059669" stroke="#a7f3d0" stroke-width="2"/>
+          <text x="279" y="22" text-anchor="middle" fill="#a7f3d0" font-size="12" font-weight="700">Gear N4 (+6:1)</text>
+          <rect x="265" y="122" width="28" height="95" rx="4" fill="#047857" stroke="#a7f3d0" stroke-width="2"/>
+          <text x="279" y="229" text-anchor="middle" fill="#a7f3d0" font-size="11" font-weight="700">N3</text>
+
+          <!-- Stage 3 Forward (N5 & N6) -->
+          <rect x="390" y="34" width="28" height="82" rx="4" fill="#059669" stroke="#a7f3d0" stroke-width="2"/>
+          <text x="404" y="24" text-anchor="middle" fill="#a7f3d0" font-size="12" font-weight="700">Gear N6 (+3.5:1)</text>
+          <rect x="390" y="118" width="28" height="98" rx="4" fill="#047857" stroke="#a7f3d0" stroke-width="2"/>
+          <text x="404" y="229" text-anchor="middle" fill="#a7f3d0" font-size="11" font-weight="700">N5</text>
+
+          <!-- Reverse Stage with Idler (N7, Idler, N8) -->
+          <rect x="515" y="36" width="28" height="74" rx="4" fill="#e11d48" stroke="#fecdd3" stroke-width="2"/>
+          <text x="529" y="24" text-anchor="middle" fill="#fda4af" font-size="12" font-weight="700">N8 (-4:1 Rev)</text>
+          <rect x="515" y="112" width="28" height="36" rx="4" fill="#f59e0b" stroke="#fef3c7" stroke-width="2"/>
+          <text x="552" y="134" fill="#fbbf24" font-size="12" font-weight="800">← IDLER</text>
+          <rect x="515" y="150" width="28" height="66" rx="4" fill="#be123c" stroke="#fecdd3" stroke-width="2"/>
+          <text x="529" y="229" text-anchor="middle" fill="#fda4af" font-size="11" font-weight="700">N7</text>
+        </svg>
+      `,
+      columnTangent: `
+        <svg viewBox="0 0 660 260" class="w-full max-w-2xl h-auto font-sans">
+          <!-- Axes -->
+          <line x1="75" y1="220" x2="620" y2="220" stroke="#cbd5e1" stroke-width="2.5"/>
+          <line x1="75" y1="25" x2="75" y2="220" stroke="#cbd5e1" stroke-width="2.5"/>
+          <text x="355" y="250" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">Slenderness Ratio (Le / ρ)</text>
+          <text x="22" y="125" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700" transform="rotate(-90 22 125)">Critical Stress (Pcr / A)</text>
+
+          <!-- Sy level & Sy/2 Tangent Point level -->
+          <line x1="75" y1="55" x2="130" y2="55" stroke="#34d399" stroke-width="3.5"/>
+          <text x="65" y="59" text-anchor="end" fill="#34d399" font-size="13" font-weight="800">Sy</text>
+
+          <line x1="75" y1="137" x2="310" y2="137" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,5"/>
+          <line x1="310" y1="137" x2="310" y2="220" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,5"/>
+          <text x="65" y="142" text-anchor="end" fill="#fbbf24" font-size="13" font-weight="800">Sy / 2</text>
+          <text x="310" y="236" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">(Le/ρ)T</text>
+          <text x="130" y="236" text-anchor="middle" fill="#34d399" font-size="11" font-weight="700">10</text>
+
+          <!-- Johnson Parabola (Intermediate) -->
+          <path d="M 130 55 Q 235 60, 310 137" fill="none" stroke="#38bdf8" stroke-width="3.8"/>
+          <text x="225" y="75" fill="#38bdf8" font-size="13" font-weight="700">Johnson Parabola</text>
+          <text x="225" y="92" fill="#94a3b8" font-size="11">(Intermediate Column)</text>
+
+          <!-- Euler Hyperbola (Long Column) -->
+          <path d="M 310 137 Q 395 198, 590 210" fill="none" stroke="#f43f5e" stroke-width="3.8"/>
+          <text x="475" y="172" fill="#fda4af" font-size="13" font-weight="700">Euler Curve: π²E / (Le/ρ)²</text>
+          <text x="475" y="188" fill="#94a3b8" font-size="11">(Long Slender Column)</text>
+
+          <!-- Tangent Point Highlight -->
+          <circle cx="310" cy="137" r="7" fill="#fbbf24" stroke="#0f172a" stroke-width="2"/>
+          <text x="325" y="128" fill="#fbbf24" font-size="14" font-weight="800">← TANGENT POINT</text>
+        </svg>
+      `,
+      springsParallelSeries: `
+        <svg viewBox="0 0 660 200" class="w-full max-w-2xl h-auto font-sans">
+          <!-- Left: Parallel Springs -->
+          <rect x="45" y="25" width="210" height="14" fill="#64748b"/>
+          <path d="M 95 39 L 80 52 L 110 65 L 80 78 L 110 91 L 80 104 L 110 117 L 95 130" fill="none" stroke="#38bdf8" stroke-width="3.5"/>
+          <path d="M 205 39 L 190 52 L 220 65 L 190 78 L 220 91 L 190 104 L 220 117 L 205 130" fill="none" stroke="#38bdf8" stroke-width="3.5"/>
+          <rect x="45" y="130" width="210" height="14" fill="#94a3b8"/>
+          <text x="150" y="168" text-anchor="middle" fill="#38bdf8" font-size="14" font-weight="800">PARALLEL: keq = k1 + k2</text>
+          <text x="150" y="186" text-anchor="middle" fill="#cbd5e1" font-size="12">(Share Load: F = F1 + F2, Same δ)</text>
+
+          <!-- Right: Series Springs -->
+          <rect x="420" y="15" width="160" height="12" fill="#64748b"/>
+          <path d="M 500 27 L 485 38 L 515 49 L 485 60 L 515 71 L 500 82" fill="none" stroke="#fbbf24" stroke-width="3.5"/>
+          <circle cx="500" cy="85" r="4" fill="#f8fafc"/>
+          <path d="M 500 88 L 485 99 L 515 110 L 485 121 L 515 132 L 500 143" fill="none" stroke="#34d399" stroke-width="3.5"/>
+          <text x="500" y="168" text-anchor="middle" fill="#fbbf24" font-size="14" font-weight="800">SERIES: 1/keq = 1/k1 + 1/k2</text>
+          <text x="500" y="186" text-anchor="middle" fill="#cbd5e1" font-size="12">(Share Deflection: δ = δ1 + δ2, Same F)</text>
+        </svg>
+      `
+    };
+
+    // Complete 28 Flashcard Dataset (All 22 User-Specified Items + 6 Remaining Sample Exam / Lecture 1-11 Theory Questions)
+    const FLASHCARDS_DATA = [
+      {
+        id: 1,
+        source: "Sample Exam Q1.1 / L1 Q4",
+        category: "L1 Design & LCA",
+        isSampleExam: true,
+        marks: "4 Marks",
+        question: "Describe \"Life Cycle Assessment (LCA)\" and draw a schematic of its phases.",
+        hint: "Think of a cradle-to-grave environmental tool with 3 vertical phases on the left interacting with 'Interpretation' on the right.",
+        answerPoints: [
+          "<strong>Definition:</strong> LCA is a cradle-to-grave tool used to evaluate the environmental impact of a product, process, or activity throughout its entire life cycle to identify environmental \"hot spots\" and select optimised solutions.",
+          "<strong>Four Major Phases:</strong><br>1) Goal definition and scope<br>2) Inventory analysis<br>3) Impact assessment (Classification, Characterization, Normalization, Weighting)<br>4) Interpretation"
+        ],
+        sketchGuide: "Three stacked boxes on the left (Goal Definition & Scope ↔ Inventory Analysis ↔ Impact Assessment) connected with two-way horizontal arrows to a single tall \"Interpretation\" box on the right.",
+        svgKey: "lca"
+      },
+      {
+        id: 2,
+        source: "L1 Q5",
+        category: "L1 Design & LCA",
+        isSampleExam: false,
+        question: "What is the purpose of \"Inventory Analysis\" in LCA?",
+        hint: "Focus on quantifying all direct and indirect environmental inputs and outputs across every life-cycle stage.",
+        answerPoints: [
+          "<strong>Purpose:</strong> To gather detailed quantitative data on all direct and indirect environmental <strong>inputs and outputs</strong> across every stage of a product's life cycle.",
+          "<strong>Key Data Collected:</strong> Raw materials (virgin/recycled), energy consumed, air/water emissions, waterborne wastes, co-products, and solid waste."
+        ]
+      },
+      {
+        id: 3,
+        source: "L1 Q1",
+        category: "L1 Design & LCA",
+        isSampleExam: false,
+        question: "What are the steps in the engineering design process of a product? Sketch their relationship.",
+        hint: "5 sequential forward steps with an 'Iteration / Improve the Design' feedback loop from Step 4 back to Step 2.",
+        answerPoints: [
+          "<strong>5 Steps in Sequence:</strong><br>1) Recognize the Need → 2) Create a Design → 3) Prepare a Model → 4) Test and Evaluate the Model → 5) Communicate the Design."
+        ],
+        sketchGuide: "Draw the 5 sequential blocks left-to-right and include a feedback loop from \"Test and Evaluate the Model\" passing through \"Improve the Design\" (Iteration) returning to \"Create a Design\".",
+        svgKey: "designProcess"
+      },
+      {
+        id: 4,
+        source: "L1 Q2",
+        category: "L1 Design & LCA",
+        isSampleExam: false,
+        question: "Differentiate between Mechanical Design and Machine Design.",
+        hint: "Compare the two stems of Mechanical Engineering: Energy vs. Structures & Motion.",
+        answerPoints: [
+          "<strong>Two Stems of Mechanical Engineering:</strong><br>1) <em>Energy</em> (thermodynamics, heat transfer, combustion)<br>2) <em>Structures and motion</em> (strength of materials, solid mechanics, kinematics, dynamics).",
+          "<strong>Mechanical Design:</strong> Involves <strong>both stems</strong> (e.g., internal combustion engines, heat exchangers, air compressors).",
+          "<strong>Machine Design:</strong> A subset of mechanical design focusing strictly on the <strong>structures and motion stem</strong> (e.g., gearboxes, V-belt drives, machine structures)."
+        ]
+      },
+      {
+        id: 5,
+        source: "L1 Q3",
+        category: "L1 Design & LCA",
+        isSampleExam: false,
+        question: "Define Perfect Elasticity, Homogeneity, and Isotropy.",
+        hint: "Three idealized material assumptions: shape recovery, uniform throughout volume, and uniform in all directions.",
+        answerPoints: [
+          "<strong>Perfect Elasticity:</strong> Material returns to its original shape immediately upon removal of loads.",
+          "<strong>Homogeneity:</strong> Component has identical properties throughout its entire extent/volume.",
+          "<strong>Isotropy:</strong> Elastic properties are identical in all directions at any point."
+        ]
+      },
+      {
+        id: 6,
+        source: "Sample Exam Q4.1 / L2 Q1, Q8",
+        category: "L2 Failure & FoS",
+        isSampleExam: true,
+        marks: "3 Marks",
+        question: "Identify the difference between even and uneven materials, and explain why brittle FoS is twice ductile FoS.",
+        hint: "Compare tensile vs. compressive strengths, and think about sudden catastrophic fracture vs. local yielding relief.",
+        answerPoints: [
+          "<strong>Even Material:</strong> Equal tensile and compressive strengths (typical of ductile materials).",
+          "<strong>Uneven Material:</strong> Different tensile and compressive strengths (typical of brittle materials, which are much stronger in compression than tension).",
+          "<strong>Why Brittle FoS is 2× Ductile FoS:</strong> Brittle fracture is sudden and catastrophic without prior plastic deformation warning, and brittle materials cannot yield locally to relieve stress concentrations or internal flaws."
+        ]
+      },
+      {
+        id: 7,
+        source: "L2 Q2, Q3",
+        category: "L2 Failure & FoS",
+        isSampleExam: false,
+        question: "Differentiate between static and fatigue loading, and sketch stresses in rotating machine elements.",
+        hint: "Gradual constant load vs. time-varying cyclic load; a rotating shaft under a stationary radial load sees completely reversed bending.",
+        answerPoints: [
+          "<strong>Static Load:</strong> Applied gradually without shock and held constant over time.",
+          "<strong>Fatigue Load:</strong> Varies cyclically with time (repeated, completely reversed, or fluctuating), initiating micro-cracks at stress concentrations that propagate to sudden fracture well below yield strength."
+        ],
+        sketchGuide: "Plot Stress (σ) vs. Time (t): Draw a flat horizontal line for static stress, and a sinusoidal wave symmetric about zero (mean stress σm = 0) for completely reversed bending in a rotating shaft carrying a stationary radial load.",
+        svgKey: "fatigueStress"
+      },
+      {
+        id: 8,
+        source: "L2 Q4, Q5, Q6, Q7",
+        category: "L2 Failure & FoS",
+        isSampleExam: false,
+        question: "Major mechanical failures, yielding failure, FoS definition, and failure prediction methods for ductile vs. brittle materials.",
+        hint: "Yielding vs fracture; FoS = Strength / Allowable Stress; von Mises/Tresca for ductile; Normal Stress/Mohr for brittle.",
+        answerPoints: [
+          "<strong>Major Mechanical Failures:</strong> Elastic deflection, yielding (permanent plastic deformation when stress exceeds yield strength <em>Sy</em> while remaining in one piece), fracture (separation into pieces when stress exceeds ultimate strength <em>Su</em>), fatigue, buckling, and rapid fracture.",
+          "<strong>Factor of Safety (FoS):</strong> <code>FoS = Material Strength / Allowable Stress</code>.",
+          "<strong>Ductile Static Theories:</strong> Maximum Distortion Energy Theory (von Mises) or Maximum Shear Stress Theory (Tresca).",
+          "<strong>Brittle Static Theories:</strong> Maximum Normal Stress Theory or Modified/Coulomb Mohr.",
+          "<strong>Fluctuating Ductile Theories:</strong> Goodman, Gerber, or Soderberg."
+        ]
+      },
+      {
+        id: 9,
+        source: "Sample Exam Q3.1",
+        category: "L3-L4 Gears & Trains",
+        isSampleExam: true,
+        marks: "4 Marks",
+        question: "Define backlash, explain why it is required, and list two methods to create it.",
+        hint: "Tooth space minus tooth thickness on the pitch circle; prevents jamming and allows lubrication.",
+        answerPoints: [
+          "<strong>Definition:</strong> The amount by which the width of a tooth space exceeds the thickness of the engaging tooth measured on the pitch circle.",
+          "<strong>Why Required (Purpose):</strong> Prevents jamming from thermal expansion and mounting/manufacturing inaccuracies, and provides space for a lubricating film.",
+          "<strong>Two Creation Methods:</strong><br>1) Feed the gear cutter deeper into the blank than theoretical depth, OR<br>2) Increase the installed centre distance between mating gears beyond the theoretical value."
+        ]
+      },
+      {
+        id: 10,
+        source: "L3 Q1",
+        category: "L3-L4 Gears & Trains",
+        isSampleExam: false,
+        question: "Describe the Fundamental Law of Gearing and Conjugate Action.",
+        hint: "Where must the common normal to the tooth surfaces at the contact point intersect the line of centres?",
+        answerPoints: [
+          "<strong>Fundamental Law of Gearing:</strong> To maintain a constant angular velocity ratio between meshing gears, the common normal to the tooth profiles at the point of contact must always intersect the line of centres at a fixed point <em>P</em> called the <strong>pitch point</strong>.",
+          "<strong>Conjugate Action:</strong> Tooth profiles designed to satisfy this constant angular velocity ratio condition exhibit conjugate action (such as the involute profile)."
+        ]
+      },
+      {
+        id: 11,
+        source: "L3 Q2, Q5",
+        category: "L3-L4 Gears & Trains",
+        isSampleExam: false,
+        question: "Cause of gear interference and problems associated with undercutting.",
+        hint: "Contact inside the base circle tangent point is non-involute; cutting away the root weakens the tooth.",
+        answerPoints: [
+          "<strong>Cause of Interference:</strong> Occurs when the addendum of the mating gear extends inside the interference (tangent) point of the base circle, contacting the non-involute flank near the root.",
+          "<strong>Two Problems with Undercutting (removing interfering root material):</strong><br>1) Severe weakening of the tooth at its highest-stressed cantilever root section.<br>2) Loss of conjugate action below the base circle (reducing contact ratio)."
+        ]
+      },
+      {
+        id: 12,
+        source: "L3 Q3, Q6, Q8",
+        category: "L3-L4 Gears & Trains",
+        isSampleExam: false,
+        question: "Spur vs. helical gears, rotary-to-linear gearing, and full-depth vs. stub teeth.",
+        hint: "Compare straight vs. angled teeth, Rack & Pinion, and working depth 2m vs. 1.6m.",
+        answerPoints: [
+          "<strong>Spur vs. Helical Gears:</strong> Spur gears have straight teeth parallel to the shaft axis (radial and tangential forces only); helical gears have teeth inclined at a helix angle (gradual, quieter engagement and higher load capacity, but adds axial thrust).",
+          "<strong>Rotary-to-Linear Motion:</strong> A <strong>Rack and Pinion</strong> converts rotary motion to linear motion.",
+          "<strong>Full-Depth vs. Stub Teeth:</strong> Full-depth teeth have larger working depth (<code>2m</code>) than stub teeth (<code>1.6m</code>); stub teeth are stronger in bending and resist interference, but have a lower contact ratio."
+        ]
+      },
+      {
+        id: 13,
+        source: "L3 Q4, Q7",
+        category: "L3-L4 Gears & Trains",
+        isSampleExam: false,
+        question: "Define pressure angle, effect of increased centre distance, and contact ratio.",
+        hint: "Angle between line of action and common tangent; base circle rb = r cos(phi) is fixed.",
+        answerPoints: [
+          "<strong>Pressure Angle (φ):</strong> Angle between the line of action (common normal) and the common tangent to the pitch circles at the pitch point.",
+          "<strong>Effect of Increased Centre Distance:</strong> Increasing installed centre distance <em>C</em> <strong>increases</strong> the operating pressure angle φ because base circle radii (<code>rb = r cos φ</code>) are fixed.",
+          "<strong>Contact Ratio:</strong> Average number of pairs of teeth in contact simultaneously (must be <code>≥ 1.2</code> for smooth operation)."
+        ],
+        sketchGuide: "Sketch two meshing pitch circles, the horizontal common tangent through Pitch Point P, and the inclined Line of Action (common normal) at angle φ.",
+        svgKey: "pressureAngle"
+      },
+      {
+        id: 14,
+        source: "Sample Exam Q3.2 / L4 Q1–Q4",
+        category: "L3-L4 Gears & Trains",
+        isSampleExam: true,
+        marks: "3 Marks (Sketch)",
+        question: "Velocity Ratio vs. Train Value, idler gear functions, compound gears, and reverted gear trains.",
+        hint: "Single pair vs overall train; idlers reverse direction and bridge space; reverted trains have coaxial shafts (C1 = C2).",
+        answerPoints: [
+          "<strong>Velocity Ratio vs. Train Value:</strong> Velocity Ratio applies to a single gear pair; Train Value is the overall speed ratio across an entire train (<code>+</code> if input/output rotate same direction, <code>−</code> if opposite).",
+          "<strong>Three Idler Gear Functions:</strong> 1) Reverses output direction, 2) Bridges distant shafts, 3) Does NOT change train value magnitude.",
+          "<strong>Compound Gear & Reverted Train:</strong> A compound gear has two or more gears fixed on the same intermediate shaft; a <strong>reverted gear train</strong> has coaxial (in-line) input and output shafts (requiring equal stage centre distances <code>C1 = C2</code>, i.e., <code>N1 + N2 = N3 + N4</code> for equal module)."
+        ],
+        sketchGuide: "For Sample Exam Q3.2(i): Sketch the collinear Input and Output shafts on the top axis, the parallel Countershaft below, stages N1/N2, N3/N4 (+6:1), N5/N6 (+3.5:1), and N7–Idler–N8 (−4:1 Reverse).",
+        svgKey: "revertedTrain"
+      },
+      {
+        id: 15,
+        source: "L5 Q1, Q2, Q3, Q4, Q5",
+        category: "L5-L7 Shafts & Bearings",
+        isSampleExam: false,
+        question: "Shaft vs. axle, shaft mounting configurations, torque transmission elements, axial positioning, and critical stress concentration locations.",
+        hint: "Rotating torque carrier vs stationary beam; straddle vs cantilever; keys/splines vs shoulders/circlips.",
+        answerPoints: [
+          "<strong>Shaft vs. Axle:</strong> A shaft rotates to transmit power and torque; an axle is a stationary beam supporting rotating elements without carrying torque.",
+          "<strong>Mountings:</strong> Straddle-mounted (between bearings) or overhung/cantilevered.",
+          "<strong>Torque Transfer Elements:</strong> Keys, splines, pins, press/shrink fits, tapered fits.",
+          "<strong>Axial Location Components:</strong> Shoulders, collars, retaining rings (circlips), locknuts, sleeves.",
+          "<strong>Critical Stress Concentrations:</strong> Keyways, shoulder fillets, and retaining ring grooves; reduced by large fillet radii, relief grooves, or chamfers."
+        ]
+      },
+      {
+        id: 16,
+        source: "L6 Q1, Q2, Q3, Q4",
+        category: "L5-L7 Shafts & Bearings",
+        isSampleExam: false,
+        question: "Bearing load types, two major bearing groups, axial-load bearings, and brinelling.",
+        hint: "Radial/thrust/combined; Sliding vs Rolling; angular-contact & tapered roller; static overload raceway dents.",
+        answerPoints: [
+          "<strong>Bearing Load Types:</strong> Pure radial, pure thrust (axial), or combined radial and thrust load.",
+          "<strong>Two Major Groups:</strong> Sliding bearings and Rolling element bearings (ball and roller).",
+          "<strong>Axial Load Bearings:</strong> Thrust ball/roller bearings, angular-contact ball bearings, and tapered roller bearings.",
+          "<strong>Brinelling:</strong> Permanent surface indentation of raceways caused by static overload or severe shock/impact that exceeds material yield strength."
+        ]
+      },
+      {
+        id: 17,
+        source: "L6 Q5, Q6, Q7, Q8",
+        category: "L5-L7 Shafts & Bearings",
+        isSampleExam: false,
+        question: "Bearing life, rating life (L10), basic dynamic radial load rating (C), and reliability factor (Kr).",
+        hint: "Spalling fatigue threshold; L10 = 90% survival; C = load for LR revolutions at 90%; Kr adjusts for >90% reliability.",
+        answerPoints: [
+          "<strong>Bearing Life:</strong> Total revolutions (or hours at constant speed) before the first evidence of fatigue spalling develops.",
+          "<strong>Rating Life (L10):</strong> Revolutions/hours that <strong>90%</strong> of a group of identical bearings will complete or exceed before fatigue failure.",
+          "<strong>Basic Dynamic Load Rating (C):</strong> Constant radial load a group of bearings can carry for a catalog rating life of <em>LR</em> (e.g., <code>90 × 10⁶</code> or <code>10⁶</code> revolutions) with 90% reliability.",
+          "<strong>Reliability Factor (Kr):</strong> Adjusts <em>L10</em> rating life for required reliabilities higher than 90% (e.g., <code>Kr = 0.33</code> for 98% reliability / 2% failure in Sample Exam Q1.3)."
+        ]
+      },
+      {
+        id: 18,
+        source: "Sample Exam Q2.1 / L7 Q1–Q5",
+        category: "L5-L7 Shafts & Bearings",
+        isSampleExam: true,
+        marks: "3 Marks (Part 1)",
+        question: "Partial bearings definition, adhesive vs. abrasive wear, lubrication regimes (ranked), EHL, and plain bearing lubrication mechanisms.",
+        hint: "Sleeve wraps <360° (60°–180°); welding vs ploughing; rank from Hydrodynamic down to Boundary.",
+        answerPoints: [
+          "<strong>Partial Bearing (Sample Exam Q2.1):</strong> A journal bearing where the bearing sleeve wraps only partially (less than 360°, typically 60°–180°) around the journal to support unidirectional radial loads with lower friction.",
+          "<strong>Wear Types:</strong> <em>Adhesive wear</em> is metal-to-metal welding/tearing at asperities; <em>abrasive wear</em> is ploughing by hard foreign particles or hard asperities.",
+          "<strong>Lubrication Regimes Ranked by Lowest Friction (Best to Worst):</strong><br>1) Hydrodynamic / Hydrostatic (thick film)<br>2) Elasto-hydrodynamic (EHL — high local contact pressure elastically deforms surfaces and spikes lubricant viscosity)<br>3) Mixed film<br>4) Boundary lubrication.",
+          "<strong>Plain Bearing Mechanisms:</strong> Hydrodynamic (self-acting wedge) and Hydrostatic (externally pressurized pump)."
+        ]
+      },
+      {
+        id: 19,
+        source: "Sample Exam Q2.1 / L8 Q1–Q4",
+        category: "L8-L11 Columns, Springs, Flywheels & Belts",
+        isSampleExam: true,
+        marks: "6 Marks",
+        question: "Slenderness ratio, short vs. long columns, effective length (Le), and tangent point sketch.",
+        hint: "Le / rho; Johnson parabola vs Euler hyperbola; Tangent Point occurs at critical stress = Sy / 2.",
+        answerPoints: [
+          "<strong>Slenderness Ratio:</strong> <code>Le / ρ</code> (effective length divided by radius of gyration <code>ρ = √(I/A)</code>).",
+          "<strong>Short/Intermediate vs. Long Columns:</strong> Short/intermediate columns fail by inelastic yielding/buckling (Johnson parabola); long slender columns fail by elastic instability (Euler hyperbola).",
+          "<strong>Effective Length (Le):</strong> Length between inflection points (zero moment) based on end restraints: Pinned-Pinned <code>Le = L</code>, Fixed-Fixed <code>Le = 0.5L</code>, Fixed-Pinned <code>Le = 0.707L</code>, Fixed-Free <code>Le = 2L</code>."
+        ],
+        sketchGuide: "Plot Critical Stress (Pcr/A) on the vertical axis vs. Slenderness Ratio (Le/ρ) on the horizontal axis; mark the Tangent Point at Sy/2 where Johnson's parabola transitions smoothly into Euler's hyperbola at (Le/ρ)T = √(2π²E / Sy).",
+        svgKey: "columnTangent"
+      },
+      {
+        id: 20,
+        source: "L9 Q1, Q2, Q3, Q4",
+        category: "L8-L11 Columns, Springs, Flywheels & Belts",
+        isSampleExam: false,
+        question: "Spring free vs. working length, parallel vs. series springs, aspect ratio, and clash allowance.",
+        hint: "Unloaded vs operating length; parallel adds k, series adds 1/k; Lf/D governs buckling; 10-15% margin before solid length.",
+        answerPoints: [
+          "<strong>Free vs. Working Length:</strong> Free length (<em>Lf</em>) is unloaded length; working length (<em>Lw</em>) is length under operating load.",
+          "<strong>Parallel vs. Series Springs:</strong> Parallel springs share load (<code>keq = k1 + k2</code>); series springs share deflection (<code>1/keq = 1/k1 + 1/k2</code>).",
+          "<strong>Aspect Ratio:</strong> <code>Lf / D</code> (free length to mean coil diameter), which governs compression spring buckling (buckles if <code>Lf/D > ~4–5</code> depending on end conditions).",
+          "<strong>Clash Allowance:</strong> Margin of extra deflection (typically <strong>10–15%</strong> of working deflection) between maximum operating length and solid length (<em>Ls</em>) to prevent coils clashing solid."
+        ],
+        sketchGuide: "Sketch two springs side-by-side sharing a load plate for Parallel (keq = k1 + k2), and two springs stacked end-to-end for Series (1/keq = 1/k1 + 1/k2).",
+        svgKey: "springsParallelSeries"
+      },
+      {
+        id: 21,
+        source: "Sample Exam Q1.2 / L10 Q1–Q5",
+        category: "L8-L11 Columns, Springs, Flywheels & Belts",
+        isSampleExam: true,
+        marks: "5 Marks",
+        question: "Flywheel function, mass placement, failure mode, containment enclosure, and four shaft mounting methods.",
+        hint: "Kinetic energy reservoir (1/2 I ω²); rim maximizes I = mr²; centrifugal tensile burst; 4 hub-to-shaft connections.",
+        answerPoints: [
+          "<strong>Function:</strong> Acts as a mechanical energy reservoir to smooth out shaft speed fluctuations caused by torque variations over a work cycle.",
+          "<strong>Mass Placement:</strong> Placed at the outer rim (away from axis) to maximize mass moment of inertia <em>I</em> (since <code>Ek = ½ I ω²</code> and <code>I = m r²</code>).",
+          "<strong>Likely Failure Mode & Containment:</strong> Tensile burst fracture from centrifugal hoop/radial stresses (analogous to a thick-walled cylinder), plus shaft fatigue or hub fretting. A containment enclosure prevents high-energy shrapnel hazards if the flywheel bursts.",
+          "<strong>Four Shaft Mounting Methods:</strong><br>1) Keyed connection (with keyway/setscrew)<br>2) Press/interference fit (e.g., reinforcing hub on raised pad)<br>3) Split hub clamped with bolts<br>4) Flanged/bolted hub or tapered bushing/ring connection."
+        ]
+      },
+      {
+        id: 22,
+        source: "L11 Belt Drives",
+        category: "L8-L11 Columns, Springs, Flywheels & Belts",
+        isSampleExam: false,
+        question: "Belt drive advantages, elastic creep, and four common belt drive configurations.",
+        hint: "Long centre distance & shock absorption; tight-to-slack tension change causes belt stretch/contraction slip.",
+        answerPoints: [
+          "<strong>Belt Drive Advantages:</strong> Transmits power over long centre distances, absorbs shock loads, damps/isolates vibration, and reduces cost.",
+          "<strong>Elastic Creep:</strong> Relative sliding motion between belt and pulley caused by belt elongation/contraction as tension changes from tight side to slack side, making the belt move slightly slower than the driving pulley surface.",
+          "<strong>Four Configurations:</strong><br>1) Non-reversing open belt<br>2) Reversing crossed belt<br>3) Reversing open-belt drive (with idlers)<br>4) Out-of-plane (quarter-turn) pulleys."
+        ]
+      },
+      {
+        id: 23,
+        source: "Sample Exam Q2.4 / L9 Buckling",
+        category: "L8-L11 Columns, Springs, Flywheels & Belts",
+        isSampleExam: true,
+        marks: "3 Marks",
+        question: "Would buckling problems be encountered if one end of a compression spring is free to tip? Explain why.",
+        hint: "Compare column end conditions: fixed-guided vs. fixed-free (where effective length Le doubles to 2 Lf).",
+        answerPoints: [
+          "<strong>Direct Exam Answer:</strong> <strong>Yes</strong>, buckling problems are much more likely to be encountered if one end of the spring is free to tip.",
+          "<strong>Mechanical Explanation:</strong> Just like a column with one end fixed and one end free (<code>Le = 2L</code>), allowing one end of a helical compression spring to tip doubles its effective length (or shifts it to the worst-case buckling curve on the <code>δ/Lf</code> vs. <code>Lf/D</code> stability chart).",
+          "<strong>Design Check:</strong> On the spring buckling stability chart, a spring with parallel guided ends is stable up to <code>Lf/D ≈ 5.2</code>, whereas if one end is free to tip/rotate, buckling occurs at a much smaller aspect ratio (<code>Lf/D > 2.6</code>)."
+        ]
+      },
+      {
+        id: 24,
+        source: "L4 Q5, Q6 / Tut 5 Gear Forces",
+        category: "L3-L4 Gears & Trains",
+        isSampleExam: false,
+        question: "What forces act on a spur gear tooth during power transmission, and what is the direction of the radial component?",
+        hint: "Resolve normal tooth load F into tangential Ft (torque) and radial Fr = Ft tan(phi).",
+        answerPoints: [
+          "<strong>Two Orthogonal Components on Spur Gears (neglecting friction):</strong><br>1) <strong>Tangential Force (<code>Ft = T / r</code>):</strong> Acts tangent to the pitch circle; transmits torque and power (opposes rotation on the driving pinion, acts in the direction of rotation on the driven gear).<br>2) <strong>Radial Force (<code>Fr = Ft tan φ</code>):</strong> Acts along the line of centres.",
+          "<strong>Direction of Radial Force (Fr):</strong> Always acts <strong>radially inward toward the centre of the gear</strong> (tending to push the two meshing gears apart)."
+        ]
+      },
+      {
+        id: 25,
+        source: "Sample Exam Q4.2 / L5 Keys & ISO Fits",
+        category: "L5-L7 Shafts & Bearings",
+        isSampleExam: true,
+        marks: "10 Marks (Context)",
+        question: "Explain Splines, Woodruff keys, Gib-head keys, and how ISO Hole-Basis Fit designations (e.g., 10H7/u6 or 34H11/c11) work.",
+        hint: "Capital H = Hole basis (Dmin = Basic size); lowercase letter = shaft fundamental deviation (c = clearance, s/u = interference).",
+        answerPoints: [
+          "<strong>Splines:</strong> Multiple axial teeth machined around the shaft periphery meshing with hub grooves for high torque and axial sliding.",
+          "<strong>Woodruff & Gib-Head Keys:</strong> A <em>Woodruff key</em> is a semi-circular disc fitting a curved keyseat (self-aligning for light loads); a <em>Gib-head key</em> is a tapered rectangular key with an extraction head for removal from one side.",
+          "<strong>ISO Hole-Basis Limits & Fits (Sample Exam Q4.2):</strong><br>• Basic size (e.g., <code>10 mm</code> or <code>34 mm</code>) precedes the symbol.<br>• Hole is <code>H</code> (zero lower deviation: <code>Dmin = D</code>, <code>Dmax = D + ΔD</code>).<br>• Shaft letter sets clearance (<code>c, d, g, h</code>: <code>dmax = d + δF</code>, <code>dmin = dmax − Δd</code>) or interference/force fit (<code>p, s, u</code>: <code>dmin = d + δF</code>, <code>dmax = dmin + Δd</code>)."
+        ]
+      },
+      {
+        id: 26,
+        source: "L7 Petroff's Equation & Hydrodynamic Design",
+        category: "L5-L7 Shafts & Bearings",
+        isSampleExam: false,
+        question: "State the assumptions of Petroff's Equation and how viscosity (μ), speed (N), and unit load (P) affect hydrodynamic film thickness.",
+        hint: "Concentric journal, zero eccentricity/light load, Newtonian laminar oil film; Bearing characteristic number μN/P.",
+        answerPoints: [
+          "<strong>Petroff's Equation Assumptions:</strong><br>1) Journal and bearing bushing are concentric (zero eccentricity <code>e = 0</code>).<br>2) Bearing carries negligible/very light radial load.<br>3) End leakage of lubricant is negligible and laminar Newtonian flow applies.",
+          "<strong>Formula:</strong> Coefficient of friction <code>f = 2π² (μ N / P) (r / c)</code>.",
+          "<strong>Influence of Operating Parameters (<code>μN/P</code>):</strong> Increasing lubricant viscosity (<code>μ</code>) or shaft speed (<code>N</code>), or decreasing bearing unit load (<code>P</code>), increases the minimum film thickness <code>h0</code> and moves operation safely into the thick-film hydrodynamic regime."
+        ]
+      },
+      {
+        id: 27,
+        source: "L8 Column Verification & Secant Formula",
+        category: "L8-L11 Columns, Springs, Flywheels & Belts",
+        isSampleExam: false,
+        question: "Why is the Tangent Point verification check mandatory when sizing columns, and how are eccentrically loaded columns analyzed?",
+        hint: "Without checking Le/ρ against (Le/ρ)T, assuming Euler or Johnson is just an unverified guess!",
+        answerPoints: [
+          "<strong>Mandatory Column Verification Step:</strong> When designing a column for an unknown diameter <em>d</em>, the radius of gyration <code>ρ = d/4</code> is initially unknown. You must assume either Euler's or Johnson's equation, calculate <em>d</em>, compute the resulting <code>Le/ρ</code>, and <strong>verify it against the Tangent Point <code>(Le/ρ)T = √(2π²E / Sy)</code></strong>. If Euler was assumed but <code>Le/ρ < (Le/ρ)T</code>, you must recalculate using Johnson's equation!",
+          "<strong>Eccentric Loading (Secant Formula):</strong> When compressive load <em>P</em> acts at an eccentricity <em>e</em> from the neutral axis, bending moment and axial compression combine non-linearly via the <strong>Secant Formula</strong>."
+        ]
+      },
+      {
+        id: 28,
+        source: "L1 & L11 DFM and Belt Maintenance",
+        category: "L8-L11 Columns, Springs, Flywheels & Belts",
+        isSampleExam: false,
+        question: "Why must belt drives be scheduled for regular inspection/maintenance, and what are the core principles of Design for Manufacturing (DFM)?",
+        hint: "Belts stretch, creep, wear, and age over finite lives; DFM minimizes part count and uses standard components.",
+        answerPoints: [
+          "<strong>Why Belt Drives Require Scheduled Inspection:</strong> Unlike gears, elastomeric belts suffer progressive stretch, wear, environmental aging/cracking, and loss of initial tension over a finite service life, requiring periodic tensioning and replacement.",
+          "<strong>Core Principles of Design for Manufacturing (DFM - Lecture 1):</strong><br>1) Minimize total number of parts.<br>2) Standardize components and materials.<br>3) Design parts for ease of fabrication and foolproof assembly.<br>4) Specify the widest practical tolerances and surface finishes consistent with function."
+        ]
+      }
+    ];
+
+    // Topic Filter Categories
+    const CATEGORIES = [
+      { id: "All", label: "All Cards" },
+      { id: "Sample Exam", label: "★ Sample Exam" },
+      { id: "L1 Design & LCA", label: "L1 Design & LCA" },
+      { id: "L2 Failure & FoS", label: "L2 Failure & FoS" },
+      { id: "L3-L4 Gears & Trains", label: "L3–L4 Gears & Trains" },
+      { id: "L5-L7 Shafts & Bearings", label: "L5–L7 Shafts & Bearings" },
+      { id: "L8-L11 Columns, Springs, Flywheels & Belts", label: "L8–L11 Columns, Springs, Flywheels & Belts" }
+    ];
+
+    // App State
+    let currentCategory = "All";
+    let currentViewMode = "flip"; // 'flip' | 'list'
+    let currentIndex = 0;
+    let isFlipped = false;
+    let isHintVisible = false;
+    let filterUnmasteredOnly = false;
+    let activeDeck = [...FLASHCARDS_DATA];
+    let masteredIds = new Set();
+    let listAnswersExpanded = true;
+
+    // Load saved mastery state from localStorage safely
+    function loadSavedState() {
+      try {
+        const saved = localStorage.getItem("mcen3001_mastered_cards");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) masteredIds = new Set(parsed);
+        }
+      } catch (e) {
+        // Ignore storage errors in restricted iframes
+      }
+    }
+
+    function saveMasteredState() {
+      try {
+        localStorage.setItem("mcen3001_mastered_cards", JSON.stringify([...masteredIds]));
+      } catch (e) {
+        // Ignore storage errors
+      }
+    }
+
+    // Filter deck based on selected category & review filter
+    function rebuildActiveDeck(resetIndex = true) {
+      let filtered = FLASHCARDS_DATA.filter(card => {
+        if (currentCategory === "All") return true;
+        if (currentCategory === "Sample Exam") return card.isSampleExam;
+        return card.category === currentCategory;
+      });
+
+      if (filterUnmasteredOnly) {
+        filtered = filtered.filter(card => !masteredIds.has(card.id));
+      }
+
+      activeDeck = filtered;
+      if (resetIndex || currentIndex >= activeDeck.length) {
+        currentIndex = 0;
+      }
+      isFlipped = false;
+      isHintVisible = false;
+      renderCategoryTabs();
+      renderCurrentCard();
+      renderListView();
+      updateProgressUI();
+    }
+
+    // Render Category Filter Tabs with live counts
+    function renderCategoryTabs() {
+      const container = document.getElementById("topicTabsContainer");
+      container.innerHTML = CATEGORIES.map(cat => {
+        const count = FLASHCARDS_DATA.filter(c => {
+          if (cat.id === "All") return true;
+          if (cat.id === "Sample Exam") return c.isSampleExam;
+          return c.category === cat.id;
+        }).length;
+
+        const isActive = currentCategory === cat.id;
+        const activeClasses = isActive
+          ? "bg-amber-400 text-slate-950 border-amber-400 font-extrabold shadow"
+          : "bg-slate-950/90 text-slate-300 border-slate-800 hover:border-slate-600 hover:text-white font-semibold";
+
+        return `
+          <button
+            onclick="selectCategory('${cat.id}')"
+            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm border transition whitespace-nowrap flex items-center gap-1.5 ${activeClasses}"
+          >
+            <span>${cat.label}</span>
+            <span class="px-1.5 py-0.2 rounded-md text-xs font-mono ${isActive ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-slate-400'}">${count}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function selectCategory(catId) {
+      currentCategory = catId;
+      rebuildActiveDeck(true);
+    }
+
+    // Render the active 3D Flip Card
+    function renderCurrentCard() {
+      const flipInner = document.getElementById("flipCardInner");
+      flipInner.classList.toggle("is-flipped", isFlipped);
+
+      const hintContainer = document.getElementById("hintBoxContainer");
+      const hintBtnLabel = document.getElementById("hintBtnLabel");
+      hintContainer.classList.toggle("hidden", !isHintVisible);
+      hintBtnLabel.textContent = isHintVisible ? "Hide Hint (H)" : "Show Hint (H)";
+
+      const mainFlipLabel = document.getElementById("btnFlipMainLabel");
+      mainFlipLabel.textContent = isFlipped ? "Show Question" : "Flip for Answer";
+
+      if (activeDeck.length === 0) {
+        document.getElementById("frontCardNumber").textContent = "0/0";
+        document.getElementById("frontSourceTag").textContent = "All Mastered!";
+        document.getElementById("frontExamBadge").classList.add("hidden");
+        document.getElementById("frontQuestionText").innerHTML = "🎉 You have marked all cards in this filter as Mastered! Turn off 'To Review Only' or reset progress to review again.";
+        document.getElementById("backQuestionRecap").textContent = "No cards in current filter";
+        document.getElementById("backAnswerContent").innerHTML = "<p>Switch category or disable 'To Review Only' filter above.</p>";
+        document.getElementById("backSketchContainer").classList.add("hidden");
+        return;
+      }
+
+      const card = activeDeck[currentIndex];
+      const isMastered = masteredIds.has(card.id);
+
+      // Front Face
+      document.getElementById("frontCardNumber").textContent = `#${card.id}`;
+      document.getElementById("frontSourceTag").textContent = card.source + (card.marks ? ` • ${card.marks}` : "");
+      const examBadge = document.getElementById("frontExamBadge");
+      if (card.isSampleExam) {
+        examBadge.classList.remove("hidden");
+      } else {
+        examBadge.classList.add("hidden");
+      }
+
+      document.getElementById("frontQuestionText").textContent = card.question;
+      document.getElementById("frontHintText").textContent = card.hint || "Break the question into definition, key equations/mechanisms, and required sketch labels.";
+
+      // Back Face
+      document.getElementById("backSourceTag").textContent = card.source + (card.marks ? ` (${card.marks})` : "");
+      document.getElementById("backQuestionRecap").textContent = `Q${card.id}: ${card.question}`;
+
+      const answerHtml = card.answerPoints.map(pt => `
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-950/75 border border-slate-800/90 leading-relaxed">
+          ${pt}
+        </div>
+      `).join("");
+      document.getElementById("backAnswerContent").innerHTML = answerHtml;
+
+      // Sketch & SVG handling
+      const sketchContainer = document.getElementById("backSketchContainer");
+      const sketchText = document.getElementById("backSketchText");
+      const sketchSvgBox = document.getElementById("backSketchSvgBox");
+
+      if (card.sketchGuide) {
+        sketchContainer.classList.remove("hidden");
+        sketchText.textContent = card.sketchGuide;
+        if (card.svgKey && EXAM_SVGS[card.svgKey]) {
+          sketchSvgBox.classList.remove("hidden");
+          sketchSvgBox.innerHTML = EXAM_SVGS[card.svgKey];
+        } else {
+          sketchSvgBox.classList.add("hidden");
+          sketchSvgBox.innerHTML = "";
+        }
+      } else {
+        sketchContainer.classList.add("hidden");
+      }
+
+      // Update Mastered Buttons on both sides
+      updateMasteredButtonStyle("btnMasteredFront", "masteredIconFront", "masteredTextFront", isMastered);
+      updateMasteredButtonStyle("btnMasteredBack", "masteredIconBack", "masteredTextBack", isMastered);
+    }
+
+    function updateMasteredButtonStyle(btnId, iconId, textId, isMastered) {
+      const btn = document.getElementById(btnId);
+      const icon = document.getElementById(iconId);
+      const txt = document.getElementById(textId);
+      if (isMastered) {
+        btn.className = "px-3.5 py-1.5 rounded-xl font-extrabold text-xs sm:text-sm border border-emerald-400 bg-emerald-500/20 text-emerald-300 transition flex items-center gap-1.5";
+        icon.textContent = "✓";
+        txt.textContent = "Mastered";
+      } else {
+        btn.className = "px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border border-slate-700 bg-slate-800/90 text-slate-300 hover:border-emerald-400 transition flex items-center gap-1.5";
+        icon.textContent = "○";
+        txt.textContent = "Mark Mastered (M)";
+      }
+    }
+
+    function updateProgressUI() {
+      const total = activeDeck.length;
+      const pos = total > 0 ? currentIndex + 1 : 0;
+      document.getElementById("progressCounterText").textContent = `Card ${pos} of ${total}`;
+      document.getElementById("activeCategoryBadge").textContent = currentCategory;
+      document.getElementById("masteredCountBadge").textContent = `${masteredIds.size}/${FLASHCARDS_DATA.length}`;
+
+      const pct = total > 0 ? Math.round((pos / total) * 100) : 100;
+      document.getElementById("deckProgressBar").style.width = `${pct}%`;
+
+      const reviewBtn = document.getElementById("btnFilterReview");
+      const reviewLabel = document.getElementById("reviewFilterLabel");
+      if (filterUnmasteredOnly) {
+        reviewBtn.className = "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-extrabold border border-amber-400 bg-amber-400/20 text-amber-300 transition flex items-center gap-1.5";
+        reviewLabel.textContent = "To Review Only: ON";
+      } else {
+        reviewBtn.className = "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold border border-slate-700 bg-slate-800/80 text-slate-200 hover:border-amber-400 transition flex items-center gap-1.5";
+        reviewLabel.textContent = "To Review Only: OFF";
+      }
+    }
+
+    // Render All Cards List View
+    function renderListView() {
+      const container = document.getElementById("listCardsContainer");
+      const query = (document.getElementById("listSearchInput")?.value || "").trim().toLowerCase();
+
+      const filtered = activeDeck.filter(card => {
+        if (!query) return true;
+        const haystack = `${card.source} ${card.category} ${card.question} ${card.answerPoints.join(" ")} ${card.sketchGuide || ""}`.toLowerCase();
+        return haystack.includes(query);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="rounded-3xl bg-slate-900 border border-slate-800 p-10 text-center">
+            <p class="text-xl font-bold text-slate-300">No flashcards match your search/filter.</p>
+            <p class="text-sm text-slate-400 mt-2">Try clearing the search box or switching the topic tab above.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map((card, idx) => {
+        const isMastered = masteredIds.has(card.id);
+        const answerPointsHtml = card.answerPoints.map(pt => `
+          <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/90">
+            ${pt}
+          </div>
+        `).join("");
+
+        const sketchHtml = card.sketchGuide ? `
+          <div class="mt-4 rounded-2xl bg-slate-950 border border-sky-500/40 p-4">
+            <div class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-sky-300 mb-1.5">
+              ✏️ Exam Sketch Guide:
+            </div>
+            <p class="text-sm sm:text-base text-sky-100 mb-3">${card.sketchGuide}</p>
+            ${card.svgKey && EXAM_SVGS[card.svgKey] ? `<div class="bg-slate-900 rounded-xl p-3 border border-slate-800 flex justify-center overflow-x-auto">${EXAM_SVGS[card.svgKey]}</div>` : ''}
+          </div>
+        ` : "";
+
+        return `
+          <article class="rounded-3xl bg-slate-900 border-2 ${isMastered ? 'border-emerald-500/50' : 'border-slate-800'} p-5 sm:p-7 shadow-xl transition">
+            <!-- Top Row -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-800">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-3 py-1 rounded-lg bg-amber-400 text-slate-950 font-mono font-black text-sm">
+                  #${card.id}
+                </span>
+                <span class="px-3 py-1 rounded-lg bg-slate-800 text-amber-300 font-mono font-bold text-xs sm:text-sm border border-slate-700">
+                  ${card.source}${card.marks ? ` • ${card.marks}` : ''}
+                </span>
+                <span class="px-2.5 py-1 rounded-lg bg-slate-950 text-slate-400 font-semibold text-xs border border-slate-800">
+                  ${card.category}
+                </span>
+                ${card.isSampleExam ? `<span class="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 font-extrabold text-xs uppercase">★ Sample Exam</span>` : ''}
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button onclick="jumpToFlipCard(${card.id})" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition">
+                  Open in 3D Flip
+                </button>
+                <button onclick="toggleCardMasteredById(${card.id})" class="px-3 py-1.5 rounded-xl font-bold text-xs border transition ${isMastered ? 'border-emerald-400 bg-emerald-500/20 text-emerald-300' : 'border-slate-700 bg-slate-800 text-slate-300 hover:border-emerald-400'}">
+                  ${isMastered ? '✓ Mastered' : '○ Mark Mastered'}
+                </button>
+              </div>
+            </div>
+
+            <!-- Question -->
+            <h3 class="dynamic-list-q font-extrabold text-white mt-4 mb-4">
+              ${card.question}
+            </h3>
+
+            <!-- Answer Collapsible Section -->
+            <details class="group" ${listAnswersExpanded ? 'open' : ''}>
+              <summary class="cursor-pointer list-none inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-sm select-none hover:bg-emerald-500/25 transition">
+                <span>Model Answer &amp; Sketch Guide</span>
+                <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </summary>
+              <div class="dynamic-list-a text-slate-100 font-medium mt-4 space-y-3">
+                ${answerPointsHtml}
+                ${sketchHtml}
+              </div>
+            </details>
+          </article>
+        `;
+      }).join("");
+    }
+
+    // Navigation & Interaction Handlers
+    function flipCard() {
+      if (activeDeck.length === 0) return;
+      isFlipped = !isFlipped;
+      renderCurrentCard();
+    }
+
+    function handleCardBodyClick(event) {
+      // Avoid flipping if user clicked an interactive button inside the card
+      if (event.target.closest("button")) return;
+      flipCard();
+    }
+
+    function nextCard() {
+      if (activeDeck.length === 0) return;
+      currentIndex = (currentIndex + 1) % activeDeck.length;
+      isFlipped = false;
+      isHintVisible = false;
+      renderCurrentCard();
+      updateProgressUI();
+    }
+
+    function prevCard() {
+      if (activeDeck.length === 0) return;
+      currentIndex = (currentIndex - 1 + activeDeck.length) % activeDeck.length;
+      isFlipped = false;
+      isHintVisible = false;
+      renderCurrentCard();
+      updateProgressUI();
+    }
+
+    function toggleHint(event) {
+      if (event) event.stopPropagation();
+      isHintVisible = !isHintVisible;
+      renderCurrentCard();
+    }
+
+    function toggleCurrentCardMastered(event) {
+      if (event) event.stopPropagation();
+      if (activeDeck.length === 0) return;
+      const card = activeDeck[currentIndex];
+      toggleCardMasteredById(card.id);
+    }
+
+    function toggleCardMasteredById(cardId) {
+      if (masteredIds.has(cardId)) {
+        masteredIds.delete(cardId);
+      } else {
+        masteredIds.add(cardId);
+      }
+      saveMasteredState();
+      if (filterUnmasteredOnly) {
+        rebuildActiveDeck(false);
+      } else {
+        renderCurrentCard();
+        renderListView();
+        updateProgressUI();
+      }
+    }
+
+    function toggleFilterUnmastered() {
+      filterUnmasteredOnly = !filterUnmasteredOnly;
+      rebuildActiveDeck(true);
+    }
+
+    function resetMastery() {
+      masteredIds.clear();
+      filterUnmasteredOnly = false;
+      saveMasteredState();
+      rebuildActiveDeck(false);
+    }
+
+    function shuffleDeck() {
+      for (let i = activeDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]];
+      }
+      currentIndex = 0;
+      isFlipped = false;
+      isHintVisible = false;
+      renderCurrentCard();
+      renderListView();
+      updateProgressUI();
+    }
+
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      const flipSec = document.getElementById("flipModeSection");
+      const listSec = document.getElementById("listModeSection");
+      const btnFlip = document.getElementById("btnModeFlip");
+      const btnList = document.getElementById("btnModeList");
+
+      if (mode === "flip") {
+        flipSec.classList.remove("hidden");
+        listSec.classList.add("hidden");
+        btnFlip.className = "px-3.5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all bg-amber-400 text-slate-950 shadow";
+        btnList.className = "px-3.5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all text-slate-300 hover:text-white";
+      } else {
+        flipSec.classList.add("hidden");
+        listSec.classList.remove("hidden");
+        btnList.className = "px-3.5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all bg-amber-400 text-slate-950 shadow";
+        btnFlip.className = "px-3.5 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all text-slate-300 hover:text-white";
+        renderListView();
+      }
+    }
+
+    function jumpToFlipCard(cardId) {
+      const idx = activeDeck.findIndex(c => c.id === cardId);
+      if (idx !== -1) {
+        currentIndex = idx;
+        isFlipped = false;
+        setViewMode("flip");
+        renderCurrentCard();
+        updateProgressUI();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    function toggleAllListAnswers(expand) {
+      listAnswersExpanded = expand;
+      renderListView();
+    }
+
+    function setTextSize(size) {
+      document.body.classList.remove("text-size-normal", "text-size-large", "text-size-xl");
+      document.body.classList.add(`text-size-${size}`);
+
+      ["normal", "large", "xl"].forEach(s => {
+        const btn = document.getElementById(`sizeBtn-${s}`);
+        if (s === size) {
+          btn.classList.add("bg-slate-800", "text-amber-300");
+          btn.classList.remove("text-slate-400");
+        } else {
+          btn.classList.remove("bg-slate-800", "text-amber-300");
+          btn.classList.add("text-slate-400");
+        }
+      });
+    }
+
+    // High-contrast light/dark toggle
+    let isHighContrastLight = false;
+    function toggleContrastTheme() {
+      isHighContrastLight = !isHighContrastLight;
+      if (isHighContrastLight) {
+        document.body.classList.add("invert", "hue-rotate-180");
+      } else {
+        document.body.classList.remove("invert", "hue-rotate-180");
+      }
+    }
+
+    // Keyboard Shortcuts (Left/Right arrows, Space/Enter to flip, H for Hint, M for Mastered)
+    window.addEventListener("keydown", (e) => {
+      // Do not intercept keys when typing in search bar
+      if (document.activeElement && document.activeElement.tagName === "INPUT") return;
+      if (currentViewMode !== "flip") return;
+
+      if (e.code === "Space" || e.code === "Enter") {
+        e.preventDefault();
+        flipCard();
+      } else if (e.code === "ArrowRight") {
+        e.preventDefault();
+        nextCard();
+      } else if (e.code === "ArrowLeft") {
+        e.preventDefault();
+        prevCard();
+      } else if (e.key === "h" || e.key === "H") {
+        e.preventDefault();
+        toggleHint();
+      } else if (e.key === "m" || e.key === "M") {
+        e.preventDefault();
+        toggleCurrentCardMastered();
+      }
+    });
+
+    // Touch Swipe Gestures for Mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const touchZone = document.getElementById("touchCardZone");
+
+    touchZone.addEventListener("touchstart", (e) => {
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      }
+    }, { passive: true });
+
+    touchZone.addEventListener("touchend", (e) => {
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        const dx = e.changedTouches[0].screenX - touchStartX;
+        const dy = e.changedTouches[0].screenY - touchStartY;
+        if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          if (dx < 0) {
+            nextCard();
+          } else {
+            prevCard();
+          }
+        }
+      }
+    }, { passive: true });
+
+    // Initialize Application on Load
+    window.onload = function () {
+      loadSavedState();
+      rebuildActiveDeck(true);
+    };
+  </script>
+</body>
+</html>
